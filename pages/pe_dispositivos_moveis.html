@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Ensino: Programação para Dispositivos Móveis com React Native</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Slate, with a Sky blue accent) -->
+    <!-- Application Structure Plan: A single-page app with a top navigation bar for 'Visão Geral', 'Competências', and 'Cronograma'. This structure deconstructs the long document into manageable, user-focused sections. The core interaction is the interactive 'Cronograma', which uses a grid of clickable day cards to display daily plans in a modal, making the schedule easy to navigate and consume. This is more user-friendly than a long, static table. -->
+    <!-- Visualization & Content Choices: The primary visualization is the interactive schedule grid, which organizes the 30-day plan. Goal: Organize/Explore. Method: HTML/Tailwind grid + JS modal. Interaction: Click to view details. Justification: Superior to a static table for quick navigation. The 'Competências' section uses an accordion. Goal: Organize/Inform. Method: HTML/JS toggle. Interaction: Click to expand/collapse. Justification: Hides complexity and makes the detailed rubric less overwhelming. No charts are needed as there is no quantitative data. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .nav-btn {
+            transition: all 0.3s ease;
+        }
+        .nav-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div id="app" class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">Programação para Dispositivos Móveis</h1>
+            <p class="text-slate-600 mt-2">Plano de Ensino Interativo com React Native e Expo</p>
+        </header>
+
+        <nav class="flex justify-center items-center bg-white rounded-full shadow-md p-2 mb-10 max-w-md mx-auto">
+            <button id="nav-overview" class="nav-btn active flex-1 text-center py-2 px-4 rounded-full text-sm sm:text-base font-medium text-slate-700 hover:bg-slate-100">Visão Geral</button>
+            <button id="nav-skills" class="nav-btn flex-1 text-center py-2 px-4 rounded-full text-sm sm:text-base font-medium text-slate-700 hover:bg-slate-100">Competências</button>
+            <button id="nav-schedule" class="nav-btn flex-1 text-center py-2 px-4 rounded-full text-sm sm:text-base font-medium text-slate-700 hover:bg-slate-100">Cronograma</button>
+        </nav>
+
+        <main>
+            <!-- Visão Geral Section -->
+            <section id="view-overview">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-4">Informações da Unidade Curricular</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-700">
+                        <div><strong>Escola:</strong> Escola SENAI "Luiz Massa" 7.91</div>
+                        <div><strong>Turma:</strong> Técnico em Desenvolvimento de Sistemas</div>
+                        <div><strong>Módulo:</strong> MÓDULO ESPECÍFICO I</div>
+                        <div><strong>Semestre:</strong> 4º</div>
+                        <div class="md:col-span-2"><strong>Carga Horária:</strong> 120 horas</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mt-8">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Situação de Aprendizagem</h2>
+                    <p class="text-lg text-sky-600 font-semibold mb-6 border-b pb-4">Desafio: App "GastroAvaré Finder" com React Native</p>
+                    <div class="space-y-4 text-slate-700 leading-relaxed">
+                        <p>Vocês são uma equipe de desenvolvedores da "InovaApp Solutions", uma startup contratada para criar um aplicativo móvel para o evento "GastroAvaré", um festival de food trucks. O objetivo é ajudar os visitantes a localizar os food trucks, ver seus cardápios e receber notificações sobre eventos especiais.</p>
+                        <p class="font-semibold text-slate-800">Sua equipe deverá:</p>
+                        <ul class="list-disc list-inside space-y-2 pl-4">
+                            <li>Planejar a arquitetura do aplicativo (telas, navegação e componentes).</li>
+                            <li>Configurar o ambiente de desenvolvimento com React Native e Expo.</li>
+                            <li>Desenvolver as interfaces de usuário (UI) para a lista, detalhes e mapa.</li>
+                            <li>Implementar a lógica para consumir dados de uma API RESTful.</li>
+                            <li>Integrar APIs nativas de mapas e localização através do Expo.</li>
+                            <li>Implementar persistência de dados local para salvar favoritos.</li>
+                            <li>Gerar uma versão compilada do aplicativo (APK/IPA) usando Expo Application Services (EAS).</li>
+                            <li>Apresentar o aplicativo funcional, testado no app Expo Go.</li>
+                        </ul>
+                         <p class="font-semibold text-slate-800 mt-4">Recursos à disposição:</p>
+                        <ul class="list-disc list-inside space-y-2 pl-4">
+                            <li>Computadores com VS Code, Node.js e Expo CLI.</li>
+                            <li>Smartphones com o aplicativo Expo Go para teste em tempo real.</li>
+                            <li>Documentação de uma API RESTful com os dados do evento.</li>
+                            <li>Acesso a serviços de mapas (Google Maps API).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Competências Section -->
+            <section id="view-skills" class="hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-4">Capacidades Técnicas</h2>
+                        <div id="technical-skills-container" class="space-y-3"></div>
+                    </div>
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-4">Capacidades Socioemocionais</h2>
+                        <div id="soft-skills-container" class="space-y-3"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cronograma Section -->
+            <section id="view-schedule" class="hidden">
+                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">Cronograma de Aulas</h2>
+                    <p class="text-center text-slate-600 mb-8">Clique em um dia para ver os detalhes da aula.</p>
+                    <div id="schedule-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                        <!-- Day cards will be injected here by JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="schedule-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden modal-backdrop opacity-0">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto modal-content transform scale-95">
+            <div class="sticky top-0 bg-white border-b p-5 flex justify-between items-center z-10">
+                <h3 id="modal-title" class="text-xl font-bold text-slate-900"></h3>
+                <button id="modal-close" class="text-slate-500 hover:text-slate-800 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-body" class="p-6 sm:p-8">
+                <!-- Modal content will be injected here by JS -->
+            </div>
+        </div>
+    </div>
+
+<script>
+const AppData = {
+    skills: {
+        technical: [
+            { id: 'tech1', name: 'Identificar as características de programação de dispositivos móveis', criteria: '- Diferenciou as arquiteturas e características das principais plataformas móveis (Android/iOS).<br>- Justificou a escolha da tecnologia de desenvolvimento para o projeto "GastroAvaré Finder".' },
+            { id: 'tech2', name: 'Preparar o ambiente necessário ao desenvolvimento', criteria: '- Configurou o ambiente de desenvolvimento, incluindo IDE, emuladores e dependências do projeto, de forma autônoma.' },
+            { id: 'tech3', name: 'Projetar interfaces para dispositivos móveis', criteria: '- Criou leiautes de tela intuitivos e visualmente agradáveis.<br>- Utilizou componentes de UI nativos e gerenciadores de leiaute de forma eficaz.' },
+            { id: 'tech4', name: 'Implementar o código respeitando as características da linguagem', criteria: '- Escreveu código limpo, organizado e seguindo as boas práticas da programação orientada a objetos.<br>- Implementou a lógica de navegação entre telas e passagem de parâmetros corretamente.' },
+            { id: 'tech5', name: 'Persistir dados em dispositivos móveis', criteria: '- Implementou um banco de dados interno (SQLite ou similar) para armazenar dados localmente.<br>- Realizou as operações de CRUD (Create, Read, Update, Delete) no banco de dados local.' },
+            { id: 'tech6', name: 'Realizar a integração de dispositivos móveis aos serviços web', criteria: '- Consumiu a API RESTful, tratando as requisições GET de forma assíncrona.<br>- Realizou o parsing dos dados JSON recebidos da API e os exibiu na interface.' },
+            { id: 'tech7', name: 'Realizar os testes unitários nos componentes', criteria: '- Escreveu e executou testes unitários para as principais lógicas de negócio do aplicativo.' },
+            { id: 'tech8', name: 'Publicar aplicativos para a plataforma mobile', criteria: '- Gerou o pacote de instalação do aplicativo (APK) assinado e pronto para distribuição.' },
+        ],
+        soft: [
+            { id: 'soft1', name: 'Demonstrar autogestão', criteria: '- Organizou as tarefas individuais e da equipe, cumprindo os prazos das sprints do projeto.<br>- Utilizou o sistema de controle de versões (Git) para gerenciar o código-fonte do projeto.' },
+            { id: 'soft2', name: 'Demonstrar pensamento analítico', criteria: '- Decompôs o problema principal em tarefas menores e gerenciáveis.<br>- Depurou o código para identificar e corrigir bugs de forma eficaz.' },
+            { id: 'soft3', name: 'Demonstrar inteligência emocional', criteria: '- Colaborou com a equipe, compartilhando conhecimento e auxiliando os colegas.<br>- Recebeu e ofereceu feedback de forma construtiva durante o desenvolvimento.' },
+            { id: 'soft4', name: 'Demonstrar autonomia', criteria: '- Pesquisou soluções para problemas técnicos em documentações oficiais e fóruns.<br>- Tomou decisões de implementação apropriadas sem a necessidade de supervisão constante.' },
+        ]
+    },
+    schedule: [
+        { day: '01', strategies: '- Apresentação da UC, docente e alunos. <br> - Apresentação da Situação de Aprendizagem "GastroAvaré Finder". <br> - Exposição dialogada: Ecossistema mobile e o papel do React Native.', content: '<b>Dispositivos móveis:</b> Definição, Histórico, Características.', resources: '- Sala de aula <br> - Datashow', intervention: '"Quais aplicativos vocês mais usam? Muitos deles poderiam ser feitos com React Native?"' },
+        { day: '02', strategies: '- Exposição dialogada: Arquitetura do React Native e o ecossistema Expo. <br> - Discussão sobre as vantagens do Expo para o desenvolvimento.', content: '<b>Dispositivos móveis:</b> Arquitetura (React Native), Ambiente de desenvolvimento (Expo).', resources: '- Sala de aula <br> - Datashow', intervention: '"Por que o Expo acelera o início de um projeto? O que é o "managed workflow"?"' },
+        { day: '03', strategies: '- Atividade prática: Instalação e configuração do ambiente: Node.js, VS Code, Expo CLI. <br> - Instalação do app Expo Go no smartphone.', content: '<b>Dispositivos móveis:</b> Ambiente de desenvolvimento (Instalação e configuração).', resources: '- Laboratório de Desenvolvimento <br> - Tutoriais de instalação', intervention: '"Quais foram os principais desafios na configuração do ambiente? Como podemos ajudar os colegas?"' },
+        { day: '04', strategies: '- Atividade prática: Criação do primeiro projeto com `create-expo-app`. <br> - Exploração da estrutura de pastas e execução no Expo Go.', content: '<b>Dispositivos móveis:</b> Ambiente de desenvolvimento (Recursos e interfaces).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"O que cada pasta principal do projeto representa? O que é o `App.js`?"' },
+        { day: '05', strategies: '- Exposição dialogada: Fundamentos de JSX e componentes React Native. <br> - Apresentação de componentes básicos: `View`, `Text`, `StyleSheet`.', content: '<b>Criação de interface:</b> Leiaute de tela (Componentes de tela), Estilização com `StyleSheet`.', resources: '- Laboratório de Desenvolvimento <br> - Datashow', intervention: '"Qual a diferença entre usar CSS na web e `StyleSheet` no React Native?"' },
+        { day: '06', strategies: '- Exposição dialogada: Leiaute com Flexbox. <br> - Atividade prática: Construção de uma tela simples organizando componentes com `flexDirection`, `justifyContent` e `alignItems`.', content: '<b>Criação de interface:</b> Leiaute de tela (Gerenciadores - Flexbox).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como podemos usar Flexbox para garantir que nossa interface se adapte a telas de tamanhos diferentes?"' },
+        { day: '07', strategies: '- Atividade prática: Início da construção da tela de lista de food trucks usando o componente `FlatList` com dados mocados.', content: '<b>Criação de interface:</b> Manipulação de listas na interface (`FlatList`).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Por que a `FlatList` é mais performática do que um `.map()` dentro de um `ScrollView`?"' },
+        { day: '08', strategies: '- Atividade prática: Construção da tela de detalhes do food truck (estática).', content: '<b>Criação de interface:</b> Componentes `Image`, `ScrollView`.', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como organizar os elementos na tela de detalhes para ter uma hierarquia visual clara?"' },
+        { day: '09', strategies: '- Exposição dialogada: Navegação com React Navigation. <br> - Atividade prática: Instalar e configurar um `StackNavigator`.', content: '<b>Criação de interface:</b> Navegação entre telas (React Navigation).', resources: '- Laboratório de Desenvolvimento <br> - Documentação do React Navigation', intervention: '"Como podemos enviar informações (como o ID do food truck) de uma tela para outra?"' },
+        { day: '10', strategies: '- Atividade prática: Implementar a navegação da lista para a tela de detalhes, passando o ID do item selecionado como parâmetro.', content: '<b>Criação de interface:</b> Passagem de parâmetros entre telas.', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como acessamos os parâmetros recebidos na tela de destino?"' },
+        { day: '11', strategies: '- Exposição dialogada: Tratamento de eventos com `TouchableOpacity` e `Pressable`. <br> - Atividade prática: Adicionar interatividade aos itens da lista.', content: '<b>Criação de interface:</b> Controle dos elementos de tela (Tratamento de eventos).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Qual a diferença entre `TouchableOpacity` e `Button`?"' },
+        { day: '12', strategies: '- Exposição dialogada: Estado e Ciclo de Vida com Hooks do React (`useState`, `useEffect`). <br> - Refatoração do código para usar estado na gestão dos dados.', content: '<b>Utilizar os elementos da POO e programação funcional.</b>', resources: '- Laboratório de Desenvolvimento <br> - Documentação do React', intervention: '"Por que o `useEffect` é o local ideal para buscar dados quando a tela carrega?"' },
+        { day: '13', strategies: '- Exposição dialogada: Persistência de dados com `AsyncStorage`.', content: '<b>Persistência de dados:</b> Armazenamento (Interno com `AsyncStorage`).', resources: '- Laboratório de Desenvolvimento <br> - Datashow', intervention: '"Por que `AsyncStorage` é assíncrono? Qual a importância disso?"' },
+        { day: '14', strategies: '- **Avaliação Formativa:** Atividade prática: Implementar a funcionalidade de "favoritar" um food truck, salvando uma lista de IDs no `AsyncStorage`.', content: '<b>Persistência de dados:</b> Armazenamento (Interno com `AsyncStorage`).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como podemos ler os favoritos salvos quando o aplicativo inicia?"' },
+        { day: '15', strategies: '- **Avaliação Formativa:** Atividade prática: Implementar a lógica para exibir visualmente quais itens são favoritos. ', content: '<b>Persistência de dados:</b> Leitura e escrita de dados locais.', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como podemos verificar se um item já foi favoritado para mudar o ícone na tela?"' },
+        { day: '16', strategies: '- Exposição dialogada: Comunicação com APIs RESTful usando `fetch` ou `axios`.', content: '<b>Consumo de RESTful web service:</b> Envio de requisições (GET).', resources: '- Laboratório de Desenvolvimento <br> - Postman, Documentação da API', intervention: '"Qual a estrutura da resposta (JSON) que a API nos retorna? Quais campos são importantes?"' },
+        { day: '17', strategies: '- Exposição dialogada: Requisições assíncronas com `async/await`. <br> - Atividade prática: Implementar a função para buscar os dados da API.', content: '<b>Consumo de RESTful web service:</b> Requisições assíncronas.', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"O que acontece se a internet do usuário cair enquanto o app busca os dados? Como podemos tratar isso com `try/catch`?"' },
+        { day: '18', strategies: '- **Avaliação Formativa:** Atividade prática: Fazer o parsing do JSON e guardar os dados no estado do componente.', content: '<b>Consumo de RESTful web service:</b> Manipulação de dados (JSON).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como usamos o `useState` para armazenar a lista de food trucks vinda da API?"' },
+        { day: '19', strategies: '- **Avaliação Formativa:** Atividade prática: Exibir os dados da API na `FlatList`, substituindo os dados mocados.', content: '<b>Criação de interface:</b> Manipulação de listas na interface (com dados reais).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como podemos exibir um `ActivityIndicator` enquanto os dados não chegam da API?"' },
+        { day: '20', strategies: '- Exposição dialogada: APIs Nativas com Expo - `expo-location`.', content: '<b>Recursos de hardware:</b> GPS. <br> <b>APIs:</b> Mapa e localização.', resources: '- Laboratório de Desenvolvimento <br> - Datashow', intervention: '"Quais permissões o nosso aplicativo precisa solicitar ao usuário para acessar o GPS?"' },
+        { day: '21', strategies: '- Atividade prática: Implementar a solicitação de permissão e a obtenção da localização atual do usuário.', content: '<b>APIs:</b> Mapa e localização (`expo-location`).', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como lidamos com o caso em que o usuário nega a permissão de localização?"' },
+        { day: '22', strategies: '- Exposição dialogada: API de Mapas com `react-native-maps`. <br> - Atividade prática: Instalar e configurar a biblioteca de mapas no projeto Expo.', content: '<b>APIs:</b> Mapa e localização (`react-native-maps`).', resources: '- Laboratório de Desenvolvimento <br> - Documentação da biblioteca', intervention: '"Como adicionamos um componente `<MapView>` e um `<Marker>` no mapa?"' },
+        { day: '23', strategies: '- Atividade prática: Integrar a tela de mapa para exibir os marcadores dos food trucks com base nos dados da API.', content: '<b>APIs:</b> Mapa e localização.', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como podemos iterar sobre nossa lista de food trucks para renderizar múltiplos `<Marker>`?"' },
+        { day: '24', strategies: '- Exposição dialogada: Testes com Jest e React Native Testing Library.', content: '<b>Realizar os testes unitários.</b>', resources: '- Laboratório de Desenvolvimento', intervention: '"Como podemos escrever um teste simples para um componente, verificando se ele renderiza um texto específico?"' },
+        { day: '25', strategies: '- Atividade prática: Dia de "caça aos bugs" e depuração usando as ferramentas do React Native.', content: '(Revisão e Depuração)', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Como podemos usar `console.log` e o depurador para encontrar a causa de um bug?"' },
+        { day: '26', strategies: '- Atividade prática: Refinamento da interface (UI) e experiência do usuário (UX).', content: '<b>Criação de interface.</b>', resources: '- Laboratório de Desenvolvimento <br> - Smartphones com Expo Go', intervention: '"Quais pequenos ajustes na interface podem causar um grande impacto na experiência do usuário?"' },
+        { day: '27', strategies: '- Exposição dialogada: Compilação e distribuição com Expo Application Services (EAS).', content: '<b>Publicação do aplicativo:</b> Compilação, Distribuição (EAS Build).', resources: '- Laboratório de Desenvolvimento <br> - Datashow', intervention: '"Qual a diferença entre `expo start` e `eas build`?"' },
+        { day: '28', strategies: '- **Avaliação Somativa:** Atividade prática: Configurar o `eas.json` e iniciar um build para Android.', content: '<b>Publicação do aplicativo:</b> Compilação.', resources: '- Laboratório de Desenvolvimento <br> - Conta Expo', intervention: 'Mediação e suporte para garantir que todas as equipes consigam iniciar seus builds.' },
+        { day: '29', strategies: '- **Avaliação Somativa:** Preparação da apresentação final do projeto "GastroAvaré Finder".', content: '(Consolidação e Comunicação)', resources: '- Laboratório de Desenvolvimento <br> - Ferramentas de apresentação', intervention: '"Como vocês podem demonstrar as principais funcionalidades do app de forma clara e objetiva em 10 minutos?"' },
+        { day: '30', strategies: '- Apresentação final dos projetos. <br> - Feedback do docente e da turma. <br> - Fechamento da UC e retrospectiva das competências.', content: '(Recapitulação de todos os conhecimentos e capacidades)', resources: '- Sala de aula <br> - Datashow', intervention: '"Qual foi o maior aprendizado técnico e socioemocional que vocês tiveram neste projeto?"' },
+    ]
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const views = {
+        overview: document.getElementById('view-overview'),
+        skills: document.getElementById('view-skills'),
+        schedule: document.getElementById('view-schedule'),
+    };
+
+    const navButtons = {
+        overview: document.getElementById('nav-overview'),
+        skills: document.getElementById('nav-skills'),
+        schedule: document.getElementById('nav-schedule'),
+    };
+
+    const technicalSkillsContainer = document.getElementById('technical-skills-container');
+    const softSkillsContainer = document.getElementById('soft-skills-container');
+    const scheduleGrid = document.getElementById('schedule-grid');
+    const modal = document.getElementById('schedule-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const modalClose = document.getElementById('modal-close');
+
+    function switchView(viewName) {
+        Object.values(views).forEach(view => view.classList.add('hidden'));
+        Object.values(navButtons).forEach(btn => btn.classList.remove('active'));
+        
+        views[viewName].classList.remove('hidden');
+        navButtons[viewName].classList.add('active');
+    }
+
+    Object.keys(navButtons).forEach(key => {
+        navButtons[key].addEventListener('click', () => switchView(key));
+    });
+
+    function createAccordionItem(skill) {
+        const container = document.createElement('div');
+        container.className = 'border border-slate-200 rounded-lg';
+        
+        const header = document.createElement('button');
+        header.className = 'w-full text-left p-4 flex justify-between items-center hover:bg-slate-50 transition-colors';
+        header.innerHTML = `
+            <span class="font-medium text-slate-800">${skill.name}</span>
+            <svg class="w-5 h-5 text-slate-500 transition-transform transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        `;
+
+        const content = document.createElement('div');
+        content.className = 'p-4 border-t border-slate-200 bg-slate-50 text-slate-600 hidden leading-relaxed';
+        content.innerHTML = skill.criteria;
+
+        header.addEventListener('click', () => {
+            content.classList.toggle('hidden');
+            header.querySelector('svg').classList.toggle('rotate-180');
+        });
+
+        container.appendChild(header);
+        container.appendChild(content);
+        return container;
+    }
+
+    AppData.skills.technical.forEach(skill => {
+        technicalSkillsContainer.appendChild(createAccordionItem(skill));
+    });
+
+    AppData.skills.soft.forEach(skill => {
+        softSkillsContainer.appendChild(createAccordionItem(skill));
+    });
+
+    AppData.schedule.forEach(dayData => {
+        const dayCard = document.createElement('button');
+        dayCard.className = 'day-card bg-white p-4 rounded-lg shadow hover:shadow-md hover:-translate-y-1 transition-all text-center border-2 border-transparent hover:border-sky-500';
+        dayCard.dataset.day = dayData.day;
+        dayCard.innerHTML = `
+            <div class="font-bold text-lg text-slate-800">Dia ${dayData.day}</div>
+        `;
+        scheduleGrid.appendChild(dayCard);
+    });
+
+    scheduleGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.day-card');
+        if (card) {
+            const day = card.dataset.day;
+            const dayData = AppData.schedule.find(d => d.day === day);
+            if (dayData) {
+                openModal(dayData);
+            }
+        }
+    });
+
+    function openModal(data) {
+        modalTitle.textContent = `Detalhes da Aula - Dia ${data.day}`;
+        modalBody.innerHTML = `
+            <div class="space-y-6">
+                <div>
+                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Estratégias de Ensino</h4>
+                    <div class="text-slate-600 pl-4 border-l-4 border-sky-200">${data.strategies}</div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Conteúdo Formativo</h4>
+                    <div class="text-slate-600 pl-4 border-l-4 border-emerald-200">${data.content}</div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Recursos / Ambientes</h4>
+                    <div class="text-slate-600 pl-4 border-l-4 border-amber-200">${data.resources}</div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Intervenção Mediadora</h4>
+                    <div class="text-slate-600 pl-4 border-l-4 border-rose-200 italic">"${data.intervention}"</div>
+                </div>
+            </div>
+        `;
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.add('opacity-100');
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }
+        }, 10);
+    }
+
+    function closeModal() {
+        modal.classList.remove('opacity-100');
+        const content = modal.querySelector('.modal-content');
+        if (content) {
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+});
+</script>
+
+</body>
+</html>

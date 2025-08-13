@@ -1,0 +1,38 @@
+body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Efeito de sublinhado animado para os links de navegação */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3b82f6; /* blue-500 */
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        /* Estilo para o canvas do fundo animado */
+        #tech-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Coloca o canvas atrás de todo o conteúdo */
+        }
+        /* Garante que o conteúdo principal tenha um fundo para cobrir a animação */
+        body {
+            background-color: transparent; /* Fundo do body transparente */
+        }
+        .dark body {
+            background-color: #111827; /* Fundo sólido para o modo escuro */
+        }
