@@ -109,25 +109,29 @@
                     <h2 class="text-2xl font-bold text-slate-900 mb-2">Situação de Aprendizagem</h2>
                     <p class="text-lg text-sky-600 font-semibold mb-6 border-b pb-4">Desafio: App "GastroAvaré Finder" com React Native</p>
                     <div class="space-y-4 text-slate-700 leading-relaxed">
-                        <p>A startup "InovaApp Solutions" precisa de uma equipe de desenvolvedores para criar o aplicativo "GastroAvaré Finder". O projeto será dividido em duas fases, acompanhando os semestres.</p>
+                        <p><strong>Contexto:</strong> A startup "InovaApp Solutions" foi contratada pela prefeitura de Avaré para desenvolver o aplicativo oficial do "GastroAvaré", um festival de food trucks que atrai milhares de visitantes anualmente. A comunicação atual, baseada em redes sociais, é fragmentada e não oferece uma experiência centralizada.</p>
+                        <p><strong>Problema:</strong> Os visitantes do festival perdem tempo procurando seus food trucks favoritos e não têm acesso fácil aos cardápios e promoções. Isso gera uma experiência de usuário frustrante e diminui o potencial de vendas para os expositores.</p>
+                        <p><strong>Desafio:</strong> Sua equipe de desenvolvedores mobile precisa criar o aplicativo "GastroAvaré Finder", uma solução completa e intuitiva que servirá como o guia oficial do evento. O sucesso do aplicativo é crucial para a reputação da "InovaApp Solutions" e para a satisfação dos visitantes e organizadores. O projeto será dividido em duas fases, acompanhando os semestres.</p>
                         
-                        <div class="mt-4">
-                            <h3 class="font-semibold text-slate-800">Fase 1 (3º Semestre): Interface e Navegação</h3>
+                        <div class="mt-6 bg-slate-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-slate-800">Fase 1 (3º Semestre): Construindo a Base Visual e Navegável (MVP de Interface)</h3>
+                            <p class="text-sm text-slate-600 mt-1 mb-3"><strong>Objetivo:</strong> Criar um protótipo visualmente funcional que demonstre a aparência e a experiência de navegação do aplicativo.</p>
                             <ul class="list-disc list-inside space-y-2 pl-4 mt-2">
-                                <li>Configurar o ambiente de desenvolvimento com React Native e Expo.</li>
-                                <li>Desenvolver as interfaces de usuário (UI) estáticas para a lista de food trucks e a tela de detalhes.</li>
-                                <li>Implementar a navegação entre as telas usando React Navigation.</li>
-                                <li>Estruturar o projeto com componentes reutilizáveis.</li>
+                                <li><strong>Ambiente Configurado:</strong> Preparar todo o ambiente de desenvolvimento utilizando React Native e o ecossistema Expo.</li>
+                                <li><strong>Design de Telas (UI):</strong> Desenvolver as interfaces estáticas (sem dados reais) para a tela inicial (lista de food trucks), a tela de detalhes (com informações de um food truck) e uma tela de mapa placeholder.</li>
+                                <li><strong>Navegação Fluida:</strong> Implementar a navegação completa entre as telas, permitindo que o usuário clique em um food truck e seja levado para sua página de detalhes.</li>
+                                <li><strong>Componentização:</strong> Estruturar o projeto de forma modular, criando componentes reutilizáveis (ex: Card do Food Truck) para garantir um código limpo e de fácil manutenção.</li>
                             </ul>
                         </div>
 
-                        <div class="mt-4">
-                            <h3 class="font-semibold text-slate-800">Fase 2 (4º Semestre): Dados, APIs e Publicação</h3>
+                        <div class="mt-4 bg-slate-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-slate-800">Fase 2 (4º Semestre): Conectando o App ao Mundo Real (Dados, APIs e Publicação)</h3>
+                            <p class="text-sm text-slate-600 mt-1 mb-3"><strong>Objetivo:</strong> Transformar o protótipo visual em um aplicativo dinâmico e funcional, pronto para ser testado em um ambiente real.</p>
                             <ul class="list-disc list-inside space-y-2 pl-4 mt-2">
-                                <li>Consumir dados de uma API RESTful para popular o aplicativo.</li>
-                                <li>Integrar APIs nativas de mapas e localização através do Expo.</li>
-                                <li>Implementar persistência de dados local para salvar food trucks favoritos.</li>
-                                <li>Gerar uma versão compilada do aplicativo (APK) usando Expo Application Services (EAS).</li>
+                                <li><strong>Integração com API:</strong> Conectar o aplicativo a uma API RESTful para buscar e exibir a lista real de food trucks e seus cardápios.</li>
+                                <li><strong>Geolocalização e Mapas:</strong> Integrar APIs nativas de mapas (via Expo) para exibir a localização exata de cada food truck em um mapa interativo, mostrando também a posição do usuário.</li>
+                                <li><strong>Persistência de Dados:</strong> Implementar uma funcionalidade que permita ao usuário "favoritar" seus food trucks preferidos, salvando essa informação localmente no dispositivo.</li>
+                                <li><strong>Publicação:</strong> Gerar uma versão compilada do aplicativo (APK para Android) utilizando o Expo Application Services (EAS), pronta para ser distribuída para testes.</li>
                             </ul>
                         </div>
                     </div>
