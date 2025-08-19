@@ -3,15 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plano de Ensino: Programação Back-end com Python e Django</title>
+    <title>Plano de Ensino: Programação Back-end</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutrals (Slate, with a Sky blue accent) -->
-    <!-- Application Structure Plan: A single-page app with a top navigation bar for 'Visão Geral', 'Competências', and 'Cronograma'. The cronograma is now segmented by semester, using tabs for better organization of the extensive 225-hour plan. This structure deconstructs the long document into manageable, user-focused sections. The core interaction is the interactive 'Cronograma', which uses a grid of clickable day cards to display daily plans in a modal, making the schedule easy to navigate and consume. A PDF download feature has been added. -->
-    <!-- Visualization & Content Choices: The primary visualization is the interactive schedule grid, now split by semester. Goal: Organize/Explore. Method: HTML/Tailwind grid + JS modal. Interaction: Click to view details. Justification: Superior to a static table for quick navigation. The 'Competências' section uses an accordion. Goal: Organize/Inform. Method: HTML/JS toggle. Interaction: Click to expand/collapse. Justification: Hides complexity and makes the detailed rubric less overwhelming. No charts are needed as there is no quantitative data. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -36,62 +30,24 @@
         .modal-content {
             transition: transform 0.3s ease;
         }
-        .day-card.completed {
-            background-color: #f0fdf4; /* green-50 */
-            border-color: #22c55e; /* green-500 */
-        }
-        .complete-btn {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            width: 1.75rem;
-            height: 1.75rem;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #e2e8f0; /* slate-200 */
-            color: #94a3b8; /* slate-400 */
-            border: 1px solid #cbd5e1; /* slate-300 */
-            transition: all 0.2s ease;
-            z-index: 10;
-        }
-        .day-card.completed .complete-btn {
-            background-color: #22c55e; /* green-500 */
-            color: white;
-            border-color: #16a34a; /* green-600 */
-        }
-        .day-content {
-            cursor: pointer;
-        }
-        #pdf-download-btn:hover {
-            background-color: #f1f5f9;
-        }
-        #pdf-download-btn.loading {
-            cursor: wait;
-            background-color: #e2e8f0;
-        }
     </style>
 </head>
 <body class="text-slate-800">
 
     <div id="app" class="container mx-auto p-4 sm:p-6 lg:p-8">
         
-        <header class="text-center mb-8 relative">
-            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">Programação Back-end</h1>
-            <p class="text-slate-600 mt-2">Plano de Ensino Interativo com Python e Django</p>
-            <button id="pdf-download-btn" title="Baixar Plano de Ensino em PDF" class="absolute top-1/2 right-0 -translate-y-1/2 p-2 rounded-full transition-colors">
-                <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            </button>
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">Plano de Ensino: Programação Back-end</h1>
+            <p class="text-slate-600 mt-2">Alinhado à Metodologia SENAI de Educação Profissional (MSEP)</p>
         </header>
 
-        <nav class="flex justify-center items-center bg-white rounded-full shadow-md p-2 mb-10 max-w-md mx-auto">
+        <nav class="flex justify-center items-center bg-white rounded-full shadow-md p-2 mb-10 max-w-lg mx-auto">
             <button id="nav-overview" class="nav-btn active flex-1 text-center py-2 px-4 rounded-full text-sm sm:text-base font-medium text-slate-700 hover:bg-slate-100">Visão Geral</button>
             <button id="nav-skills" class="nav-btn flex-1 text-center py-2 px-4 rounded-full text-sm sm:text-base font-medium text-slate-700 hover:bg-slate-100">Competências</button>
             <button id="nav-schedule" class="nav-btn flex-1 text-center py-2 px-4 rounded-full text-sm sm:text-base font-medium text-slate-700 hover:bg-slate-100">Cronograma</button>
         </nav>
 
-        <main id="main-content">
+        <main>
             <!-- Visão Geral Section -->
             <section id="view-overview">
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
@@ -109,48 +65,55 @@
                     <h2 class="text-2xl font-bold text-slate-900 mb-2">Situação de Aprendizagem</h2>
                     <p class="text-lg text-sky-600 font-semibold mb-6 border-b pb-4">Desafio: API Evolutiva para o "GastroAvaré Finder"</p>
                     <div class="space-y-4 text-slate-700 leading-relaxed">
-                        <p>A startup "InovaApp Solutions" precisa de uma equipe de desenvolvedores back-end para construir a "espinha dorsal" do seu novo aplicativo, o "GastroAvaré Finder". O projeto será dividido em duas fases, acompanhando os semestres.</p>
+                        <p>A startup "InovaApp Solutions" precisa de uma equipe de desenvolvedores back-end para construir a "espinha dorsal" do seu novo aplicativo, o "GastroAvaré Finder". O projeto será dividido em duas fases, acompanhando os semestres, e tem como objetivo criar um serviço robusto, seguro e escalável que fornecerá todos os dados necessários para o aplicativo móvel.</p>
                         
                         <div class="mt-4">
-                            <h3 class="font-semibold text-slate-800">Fase 1 (2º Semestre): Fundamentos da API com Django</h3>
-                            <ul class="list-disc list-inside space-y-2 pl-4 mt-2">
-                                <li>Modelar e criar o banco de dados inicial.</li>
-                                <li>Desenvolver uma API RESTful usando Python, Django e Django REST Framework.</li>
-                                <li>Implementar endpoints de CRUD para os food trucks e seus cardápios.</li>
-                                <li>Escrever testes unitários para garantir a qualidade da API.</li>
-                            </ul>
+                            <h3 class="font-semibold text-slate-800">Fase 1 (2º Semestre): Fundamentos da API e CRUD</h3>
+                            <p>A equipe deverá modelar o banco de dados, construir uma API RESTful utilizando Programação Orientada a Objetos e implementar as operações básicas (CRUD - Criar, Ler, Atualizar, Deletar) para gerenciar os food trucks e seus cardápios, seguindo as melhores práticas de desenvolvimento.</p>
                         </div>
 
                         <div class="mt-4">
-                            <h3 class="font-semibold text-slate-800">Fase 2 (3º Semestre): Funcionalidades Avançadas e Deploy</h3>
-                            <ul class="list-disc list-inside space-y-2 pl-4 mt-2">
-                                <li>Implementar um sistema de autenticação e autorização com Simple JWT.</li>
-                                <li>Desenvolver endpoints seguros para que usuários possam favoritar e avaliar food trucks.</li>
-                                <li>Implementar funcionalidade de upload de imagens para os pratos do cardápio.</li>
-                                <li>Preparar e implantar (deploy) a aplicação em um serviço de nuvem.</li>
-                            </ul>
+                            <h3 class="font-semibold text-slate-800">Fase 2 (3º Semestre): Funcionalidades Avançadas e Implantação</h3>
+                            <p>A equipe evoluirá a API implementando um sistema completo de autenticação e autorização de usuários, permitirá que usuários logados interajam com o sistema (avaliando e favoritando food trucks), desenvolverá funcionalidades de upload de arquivos e, por fim, implantará (deploy) a aplicação em um serviço de nuvem, pronta para ser consumida pelo front-end.</p>
                         </div>
 
-                         <p class="font-semibold text-slate-800 mt-4">Recursos à disposição:</p>
+                         <p class="font-semibold text-slate-800 mt-4">Recursos à Disposição:</p>
                         <ul class="list-disc list-inside space-y-2 pl-4">
-                            <li>Computadores com Python, VS Code e um cliente de API (Postman/Insomnia).</li>
-                            <li>Acesso a um banco de dados (PostgreSQL).</li>
-                            <li>Documentação sobre Django, Django REST Framework, e JWT.</li>
+                            <li>Computadores com ambiente de desenvolvimento (Node.js, VS Code, Git).</li>
+                            <li>Acesso a um banco de dados (PostgreSQL ou MySQL).</li>
+                            <li>Cliente de API (Postman ou Insomnia) para testes.</li>
+                            <li>Documentação sobre arquitetura REST, Programação Orientada a Objetos e serviços de nuvem.</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- Competências Section -->
+            <!-- Competências e Critérios de Avaliação Section -->
             <section id="view-skills" class="hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
-                        <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-4">Capacidades Técnicas</h2>
-                        <div id="technical-skills-container" class="space-y-3"></div>
-                    </div>
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
-                        <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-4">Capacidades Socioemocionais</h2>
-                        <div id="soft-skills-container" class="space-y-3"></div>
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-4">Critérios de Avaliação</h2>
+                    <p class="text-slate-600 mb-6">A avaliação será contínua, observando o desenvolvimento das capacidades através dos seguintes critérios. <br><strong>Legenda:</strong> [AU] Autônomo, [PA] Parcialmente Autônomo, [AP] Apoiado, [NS] Não Satisfatório.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-100">
+                                <tr>
+                                    <th class="p-4 font-semibold text-slate-800 border-b-2 border-slate-200">Capacidade (Técnica ou Socioemocional)</th>
+                                    <th class="p-4 font-semibold text-slate-800 border-b-2 border-slate-200">Critério de Avaliação (O que será observado)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Utilizar o paradigma da programação orientada a objetos</td><td class="p-4 text-slate-700">Estrutura o código utilizando classes, atributos, métodos e encapsulamento de forma coesa e organizada.</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Elaborar diagramas de classe</td><td class="p-4 text-slate-700">Modela os relacionamentos entre as entidades do sistema (Herança, Composição, etc.) em um diagrama de classes claro.</td></tr>
+                                <tr class="border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Desenvolver API (web services) para integração de dados</td><td class="p-4 text-slate-700">Implementa os verbos HTTP (GET, POST, PUT, DELETE) de acordo com os princípios REST para criar, ler, atualizar e deletar recursos.</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Utilizar interações com base de dados para desenvolvimento</td><td class="p-4 text-slate-700">Realiza a conexão com o banco de dados e executa as operações de CRUD de forma segura e eficiente.</td></tr>
+                                <tr class="border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Desenvolver sistemas web de acordo com as regras de negócio</td><td class="p-4 text-slate-700">Implementa a lógica de autenticação e autorização, garantindo que apenas usuários autorizados acessem recursos protegidos.</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Publicar a aplicação web</td><td class="p-4 text-slate-700">Configura as variáveis de ambiente e realiza o deploy da aplicação em um serviço de nuvem, tornando-a acessível publicamente.</td></tr>
+                                <tr class="border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Demonstrar pensamento analítico</td><td class="p-4 text-slate-700">Depura e resolve erros no servidor analisando logs e o fluxo de dados entre cliente, servidor e banco de dados.</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Demonstrar autogestão</td><td class="p-4 text-slate-700">Organiza as tarefas utilizando um sistema de quadros (Kanban) e versiona o código-fonte da API de forma eficaz.</td></tr>
+                                <tr class="border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Demonstrar autonomia</td><td class="p-4 text-slate-700">Pesquisa soluções para problemas técnicos em documentações oficiais e fóruns, tomando decisões de implementação fundamentadas.</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="p-4 font-medium text-slate-900">Demonstrar inteligência emocional</td><td class="p-4 text-slate-700">Colabora com a equipe, comunicando o progresso e os desafios de forma clara e recebendo feedbacks de forma construtiva.</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -165,7 +128,7 @@
                         <button id="semester-3" class="semester-btn font-medium py-3 px-6 border-b-2 border-transparent text-slate-500">3º Semestre</button>
                     </div>
                     
-                    <p class="text-center text-slate-600 mb-8">Clique no dia para ver detalhes ou no ✓ para marcar como concluído.</p>
+                    <p class="text-center text-slate-600 mb-8">Clique em um dia para ver os detalhes da aula.</p>
                     
                     <div id="schedule-grid-2" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                         <!-- Day cards for semester 2 -->
@@ -195,127 +158,95 @@
 
 <script>
 const AppData = {
-    skills: {
-        technical: [
-            { id: 'tech1', name: 'Analisar requisitos para o desenvolvimento back-end', criteria: '- Interpretou as necessidades do sistema para definir os modelos de dados e as regras de negócio.<br>- Mapeou os requisitos para os endpoints da API.' },
-            { id: 'tech2', name: 'Modelar o banco de dados', criteria: '- Projetou o esquema do banco de dados relacional, definindo tabelas, colunas e relacionamentos.<br>- Normalizou o banco de dados para evitar redundância de dados.' },
-            { id: 'tech3', name: 'Implementar o banco de dados', criteria: '- Criou e configurou o banco de dados.<br>- Executou scripts SQL para criar a estrutura de tabelas.' },
-            { id: 'tech4', name: 'Desenvolver API RESTful', criteria: '- Estruturou o projeto back-end de forma organizada (rotas, controllers, models).<br>- Implementou os verbos HTTP (GET, POST, PUT, DELETE) corretamente.' },
-            { id: 'tech5', name: 'Implementar a segurança da aplicação', criteria: '- Desenvolveu um sistema de cadastro e login de usuários.<br>- Implementou autenticação baseada em JWT para proteger rotas.' },
-            { id: 'tech6', name: 'Realizar testes no back-end', criteria: '- Testou os endpoints da API utilizando ferramentas como Postman ou Insomnia.<br>- Escreveu testes unitários para as regras de negócio.' },
-            { id: 'tech7', name: 'Preparar a aplicação para implantação', criteria: '- Configurou variáveis de ambiente para diferentes cenários (desenvolvimento, produção).<br>- Criou um script para iniciar a aplicação em um servidor.' },
-        ],
-        soft: [
-            { id: 'soft1', name: 'Demonstrar autogestão', criteria: '- Gerenciou o tempo para cumprir as entregas de cada etapa da API.<br>- Utilizou Git para versionar o código do servidor de forma eficaz.' },
-            { id: 'soft2', name: 'Demonstrar pensamento analítico', criteria: '- Depurou erros no servidor analisando logs e mensagens de erro.<br>- Modelou o fluxo de dados entre o cliente, o servidor e o banco de dados.' },
-            { id: 'soft3', name: 'Demonstrar comunicação clara', criteria: '- Documentou os endpoints da API de forma que um desenvolvedor front-end pudesse consumi-los.<br>- Comunicou o progresso e os impedimentos para a equipe.' },
-            { id: 'soft4', name: 'Demonstrar autonomia', criteria: '- Pesquisou e resolveu problemas relacionados a configurações de banco de dados e bibliotecas.<br>- Tomou decisões de arquitetura para a API de forma fundamentada.' },
-        ]
-    },
     schedule: {
         semester2: [
-            { day: '01', completed: false, strategies: 'Apresentação da UC e da Fase 1 da Situação de Aprendizagem.<br>Exposição dialogada: O que é Back-end? Arquitetura Cliente-Servidor.', content: '<b>Fundamentos:</b> Cliente vs. Servidor, Protocolo HTTP.', resources: 'Sala de aula, Datashow', intervention: '"Qual a responsabilidade do servidor em uma aplicação como o Instagram?"' },
-            { day: '02', completed: false, strategies: 'Exposição dialogada: Introdução a APIs e o padrão REST.<br>Atividade prática: Análise de APIs públicas.', content: '<b>APIs:</b> Padrão REST, Verbos HTTP.', resources: 'Sala de aula, Postman', intervention: '"O que torna uma API "RESTful"?"' },
-            { day: '03', completed: false, strategies: 'Exposição dialogada: Introdução ao Python para Back-end.<br>Atividade prática: Instalação do Python, pip e configuração de ambientes virtuais (venv).', content: '<b>Python:</b> Sintaxe básica, Pip, Ambientes Virtuais.', resources: 'Laboratório de Informática, VS Code', intervention: '"Por que é uma boa prática usar um ambiente virtual para cada projeto?"' },
-            { day: '04', completed: false, strategies: 'Exposição dialogada: Introdução ao Framework Django.<br>Atividade prática: Criar o primeiro projeto e app Django.', content: '<b>Django:</b> Arquitetura MVT, `manage.py`, Projetos vs. Apps.', resources: 'Laboratório de Informática, VS Code', intervention: '"Qual a diferença entre um projeto Django e um app Django?"' },
-            { day: '05', completed: false, strategies: 'Exposição dialogada: Django Models.<br>Atividade prática: Criar os models para FoodTruck e Cardapio.', content: '<b>Django Models:</b> Campos, Relacionamentos (ForeignKey).', resources: 'Laboratório de Informática, VS Code', intervention: '"Como o Django transforma uma classe Python em uma tabela no banco de dados?"' },
-            { day: '06', completed: false, strategies: 'Exposição dialogada: Migrations e Django Admin.<br>Atividade prática: Rodar as migrações e registrar os models no admin.', content: '<b>Django:</b> Migrations, Django Admin.', resources: 'Laboratório de Informática, VS Code', intervention: '"Para que serve o Django Admin? Como ele pode acelerar o desenvolvimento?"' },
-            { day: '07', completed: false, strategies: 'Exposição dialogada: Introdução ao Django REST Framework (DRF).<br>Atividade prática: Instalar e configurar o DRF no projeto.', content: '<b>DRF:</b> Introdução, Serializers.', resources: 'Laboratório de Informática, VS Code', intervention: '"O que é serialização? Por que precisamos dela em uma API?"' },
-            { day: '08', completed: false, strategies: 'Atividade prática: Criar os Serializers para os models de FoodTruck e Cardapio.', content: '<b>DRF:</b> `ModelSerializer`.', resources: 'Laboratório de Informática, VS Code', intervention: '"Como um `ModelSerializer` simplifica a criação de representações JSON?"' },
-            { day: '09', completed: false, strategies: 'Exposição dialogada: Views e Roteamento no DRF.<br>Atividade prática: Criar as primeiras `APIView` para listar food trucks.', content: '<b>DRF:</b> `APIView`, Roteamento.', resources: 'Laboratório de Informática, VS Code, Postman', intervention: '"Qual a diferença entre uma View do Django e uma `APIView` do DRF?"' },
-            { day: '10', completed: false, strategies: '**Avaliação Formativa:** Implementar a `APIView` para listar e criar food trucks.', content: '<b>CRUD com DRF:</b> List (GET) e Create (POST).', resources: 'Laboratório de Informática, VS Code, Postman', intervention: 'Acompanhamento da lógica de serialização e deserialização dos dados.' },
-            { day: '11', completed: false, strategies: 'Exposição dialogada: ViewSets e Routers.<br>Atividade prática: Refatorar as views para usar `ModelViewSet`.', content: '<b>DRF:</b> `ViewSet`, `ModelViewSet`, `Routers`.', resources: 'Laboratório de Informática, VS Code', intervention: '"Quanto código um `ModelViewSet` economiza em comparação com `APIView`s separadas?"' },
-            { day: '12', completed: false, strategies: '**Avaliação Formativa:** Implementar o CRUD completo para FoodTrucks usando `ModelViewSet`.', content: '<b>CRUD com DRF:</b> GET, POST, PUT, DELETE com ViewSets.', resources: 'Laboratório de Informática, VS Code, Postman', intervention: 'Desafio: "Garantam que todos os 5 endpoints gerados pelo router estão funcionando."' },
-            { day: '13', completed: false, strategies: 'Atividade prática: Implementar o CRUD completo para Cardapios, aninhado sob os food trucks.', content: '<b>DRF:</b> Rotas Aninhadas, Relacionamentos em Serializers.', resources: 'Laboratório de Informática, VS Code', intervention: '"Como podemos fazer para que a API retorne os itens do cardápio junto com os detalhes do food truck?"' },
-            { day: '14', completed: false, strategies: 'Exposição dialogada: Testes em Django.<br>Atividade prática: Configurar o ambiente de testes do Django.', content: '<b>Testes:</b> `TestCase`, Cliente de Testes do Django.', resources: 'Laboratório de Informática, VS Code', intervention: '"Por que testar a API pelo código é mais eficiente do que manualmente pelo Postman?"' },
-            { day: '15', completed: false, strategies: 'Atividade prática: Escrever testes para os endpoints de listagem e detalhe de food trucks.', content: '<b>Testes:</b> Testando endpoints GET.', resources: 'Laboratório de Informática, VS Code', intervention: '"O que devemos verificar na resposta de um endpoint? Apenas o status code?"' },
-            { day: '16', completed: false, strategies: 'Atividade prática: Escrever testes para os endpoints de criação e atualização.', content: '<b>Testes:</b> Testando endpoints `POST` e `PUT`.', resources: 'Laboratório de Informática, VS Code', intervention: 'Acompanhamento da lógica de testes de mutação de dados.' },
-            { day: '17', completed: false, strategies: 'Exposição dialogada: Tratamento de Erros e Validações no DRF.', content: '<b>DRF:</b> Validações em Serializers, Tratamento de Exceções.', resources: 'Laboratório de Informática, VS Code', intervention: '"Como podemos customizar as mensagens de erro que a API retorna?"' },
-            { day: '18', completed: false, strategies: '**Avaliação Formativa:** Dia de prática focado em adicionar validações customizadas nos serializers.', content: '<b>DRF:</b> Validações customizadas.', resources: 'Laboratório de Informática, VS Code', intervention: 'Desafio: "Impeçam que um prato do cardápio seja criado com preço negativo."' },
-            { day: '19', completed: false, strategies: '**Avaliação Somativa:** Finalizar a implementação e os testes de todos os endpoints de CRUD para FoodTrucks e Cardapios.', content: '(Integração de conhecimentos)', resources: 'Laboratório de Informática, VS Code', intervention: 'Suporte individualizado para os desafios finais da Fase 1.' },
-            { day: '20', completed: false, strategies: 'Apresentação dos projetos da Fase 1.<br>Feedback e retrospectiva do semestre.', content: '<b>Recapitulação e Apresentação</b>', resources: 'Sala de aula, Datashow', intervention: '"Qual foi o maior aprendizado deste semestre?"' }
+            { day: '01', strategies: 'Apresentação da UC e da Fase 1 do desafio. Exposição dialogada: O paradigma da Programação Orientada a Objetos (POO).', content: '<b>4. Programação orientada a objetos:</b> 4.1. Definição, 4.3. Classes, 4.4. Objetos.', resources: 'Sala de aula, Datashow', intervention: '"Por que organizar nosso código em \'gavetas\' (classes) em vez de deixar tudo junto em um único arquivo?"' },
+            { day: '02', strategies: 'Atividade prática: Criação de classes, atributos e métodos. Exposição dialogada: Encapsulamento.', content: '<b>4. POO:</b> 4.3.4. Atributos, 4.3.5. Métodos, 4.3.6. Modificadores de acesso (encapsulamento).', resources: 'Laboratório de Informática, VS Code', intervention: '"Por que o encapsulamento ajuda a prevenir bugs e a manter o código organizado?"' },
+            { day: '03', strategies: 'Exposição dialogada: Relacionamentos entre objetos. Atividade prática: Implementação de Herança e Composição.', content: '<b>4. POO:</b> 4.8. Relacionamentos de objetos (4.8.1. Herança, 4.8.2. Agregação, 4.8.3. Composição).', resources: 'Laboratório de Informática, VS Code', intervention: '"Em nosso projeto, um \'Prato\' é PARTE de um \'Cardápio\'. Isso seria Herança ou Composição? Por quê?"' },
+            { day: '04', strategies: 'Exposição dialogada e atividade prática: Polimorfismo, Classes Abstratas e Interfaces.', content: '<b>4. POO:</b> 4.6. Polimorfismo, 4.5. Interface, 4.3.1. Classe Abstrata, 4.3.2. Interna, 4.3.3. Anônima.', resources: 'Laboratório de Informática, VS Code', intervention: '"Como o polimorfismo nos permite tratar diferentes objetos de forma semelhante, simplificando o código?"' },
+            { day: '05', strategies: 'Atividade prática: Aplicar conceitos de POO modelando as entidades do projeto (FoodTruck, Cardapio, Usuario) em um Diagrama de Classes.', content: '<b>5. Documentação:</b> 5.1. Diagrama de classes.', resources: 'Laboratório, Ferramenta de diagramação (Lucidchart)', intervention: '"A relação entre um Usuário e suas Avaliações é de \'um para muitos\'. Como representamos isso no diagrama?"' },
+            { day: '06', strategies: 'Exposição dialogada: Arquitetura Cliente-Servidor e Protocolo HTTP. Atividade prática: Análise de requisições no navegador.', content: '<b>1. Ambiente de desenvolvimento web:</b> 1.1. Definição, 1.2. Histórico, 1.3. Características. <br><b>3. Protocolo HTTP:</b> 3.1. Definição.', resources: 'Laboratório, Ferramentas de Desenvolvedor do Navegador', intervention: '"Qual a diferença fundamental entre o que o seu navegador (cliente) faz e o que o servidor do Google (servidor) faz?"' },
+            { day: '07', strategies: 'Exposição dialogada: Métodos HTTP e passagem de parâmetros. Atividade prática: Testes com métodos GET e POST usando Postman.', content: '<b>3. Protocolo HTTP:</b> 3.2. Métodos HTTP (GET, POST, PUT, DELETE, etc.), 3.3. Tipos de passagem de parâmetros.', resources: 'Laboratório, Postman', intervention: '"Por que usamos POST para enviar dados de um formulário e não GET?"' },
+            { day: '08', strategies: 'Exposição dialogada: Cabeçalhos HTTP, Media Types e Códigos de Status.', content: '<b>3. Protocolo HTTP:</b> 3.4. Cabeçalhos HTTP, 3.5. Media Types, 3.6. Códigos de status.', resources: 'Laboratório, Postman', intervention: '"O que o código de status 404 realmente significa para o cliente e para o servidor?"' },
+            { day: '09', strategies: 'Exposição dialogada: APIs e padrão REST. Análise de APIs públicas.', content: '<b>2. Web Services:</b> 2.1. Definição, 2.2. REST.', resources: 'Laboratório, Postman', intervention: '"O que torna uma API \'RESTful\'? Quais são os princípios que devemos seguir?"' },
+            { day: '10', strategies: 'Exposição dialogada: Formatos de dados JSON e XML. Atividade prática: Estruturando e lendo dados em JSON.', content: '<b>2. Web Services:</b> 2.3. Padrão JSON, 2.4. XML.', resources: 'Laboratório, VS Code', intervention: '"Por que o JSON se tornou o padrão mais popular para APIs web em comparação com o XML?"' },
+            { day: '11', strategies: 'Exposição dialogada: Introdução ao Node.js. Atividade prática: Instalação e configuração do ambiente.', content: '<b>1. Ambiente de desenvolvimento web:</b> 1.4. Ambiente de desenvolvimento back-end (1.4.1. Instalação e configuração).', resources: 'Laboratório, VS Code, Node.js', intervention: '"Se o JavaScript nasceu para rodar no navegador, como e por que ele agora roda no servidor?"' },
+            { day: '12', strategies: 'Exposição dialogada: Introdução a Frameworks (Express.js). Atividade prática: Criar o primeiro servidor "Hello World".', content: '<b>7. Frameworks:</b> 7.1. Definição, 7.2. Modelos e tipos, 7.3. Instalação e configuração.', resources: 'Laboratório, VS Code', intervention: '"O que um framework como o Express faz por nós que seria muito trabalhoso fazer \'na mão\'?"' },
+            { day: '13', strategies: 'Exposição dialogada: Padrão MVC. Atividade prática: Estruturar o projeto da API com pastas para rotas, controllers e models.', content: '<b>6. Padrão de desenvolvimento MVC:</b> 6.1. Definição, 6.2. Aplicabilidade.', resources: 'Laboratório, VS Code', intervention: '"Por que separar a lógica em Model, View e Controller ajuda a organizar projetos grandes?"' },
+            { day: '14', strategies: '**Avaliação Formativa:** Criar as rotas (endpoints) para o CRUD de Food Trucks, retornando dados estáticos (mock).', content: '<b>2. Web Services:</b> 2.2.2. Semântica da URL REST.', resources: 'Laboratório, VS Code, Postman', intervention: 'Acompanhamento para garantir que os alunos estruturem os endpoints corretamente (ex: `GET /foodtrucks`).' },
+            { day: '15', strategies: 'Exposição dialogada: Persistência de Dados. Atividade prática: Conexão com o banco de dados.', content: '<b>8. Persistência de dados:</b> 8.1. Conexão com base de dados.', resources: 'Laboratório, VS Code, Banco de Dados', intervention: '"As operações de banco de dados são assíncronas. Como o `async/await` nos ajuda a lidar com isso?"' },
+            { day: '16', strategies: 'Atividade prática: Implementar a operação de Leitura (Read) do CRUD, buscando dados do banco.', content: '<b>8. Persistência de dados:</b> 8.2. CRUD (SELECT).', resources: 'Laboratório, VS Code, Postman', intervention: '"Como podemos tratar o caso em que um `GET /foodtrucks/:id` não encontra o registro no banco?"' },
+            { day: '17', strategies: 'Atividade prática: Implementar a operação de Criação (Create) do CRUD.', content: '<b>8. Persistência de dados:</b> 8.2. CRUD (INSERT).', resources: 'Laboratório, VS Code, Postman', intervention: '"Qual código de status HTTP é o mais apropriado para retornar após uma criação bem-sucedida?"' },
+            { day: '18', strategies: 'Atividade prática: Implementar as operações de Atualização (Update) e Deleção (Delete) do CRUD.', content: '<b>8. Persistência de dados:</b> 8.2. CRUD (UPDATE, DELETE).', resources: 'Laboratório, VS Code, Postman', intervention: '"Qual a diferença semântica entre os métodos PUT e PATCH para atualização?"' },
+            { day: '19', strategies: 'Exposição dialogada e atividade prática: Aplicando Design Patterns e técnicas de Código Limpo (Clean Code) no projeto.', content: '<b>6. Padrão de desenvolvimento MVC:</b> 6.3. Design patterns. <br><b>3. Lógica de programação:</b> 3.8. Técnicas de código limpo.', resources: 'Laboratório, VS Code', intervention: '"Como podemos refatorar este controller para que ele seja mais legível e fácil de manter no futuro?"' },
+            { day: '20', strategies: 'Atividade prática: Manipulação de dados JSON e XML recebidos e enviados pela API.', content: '<b>8. Persistência de dados:</b> 8.5. Manipulação de dados utilizando XML, 8.6. Manipulação de dados utilizando JSON.', resources: 'Laboratório, VS Code', intervention: '"Como podemos transformar os dados vindos do banco para um formato JSON limpo para o cliente?"' },
+            { day: '21', strategies: 'Exposição dialogada: Versionamento de Banco de Dados. Atividade prática: Introdução a ferramentas de migration.', content: '<b>8. Persistência de dados:</b> 8.8. Versionamento do banco de dados.', resources: 'Laboratório, VS Code', intervention: '"Por que é importante versionar as alterações do banco de dados, assim como fazemos com o código?"' },
+            { day: '22', strategies: 'Dia de trabalho focado no projeto: Refinar o CRUD, adicionar validações e tratamento de erros.', content: '(Consolidação de CRUD e Validações)', resources: 'Laboratório, VS Code, Postman', intervention: 'Desafio: "Garantam que a API não quebre se o usuário enviar dados inválidos ou incompletos."' },
+            { day: '23', strategies: 'Dia de trabalho focado no projeto: Implementar Enumerações e outras estruturas de POO no modelo de dados.', content: '<b>4. POO:</b> 4.7. Enumerações.', resources: 'Laboratório, VS Code', intervention: '"Como usar uma Enum para garantir que o status de um pedido seja sempre um valor válido (ex: PENDENTE, APROVADO)?"' },
+            { day: '24', strategies: 'Dia de trabalho focado no projeto: Revisão e refatoração do código.', content: '(Consolidação de Boas Práticas)', resources: 'Laboratório, VS Code', intervention: 'Sessão de code review em grupo para identificar pontos de melhoria.' },
+            { day: '25', strategies: 'Exposição dialogada: Documentação de API. Atividade prática: Documentar a API usando Postman.', content: '<b>5. Documentação:</b> 5.2. Documentação de API (5.2.2. Postman).', resources: 'Laboratório, Postman', intervention: '"Por que uma boa documentação de API é tão crucial para a equipe de front-end?"' },
+            { day: '26', strategies: 'Preparação para a apresentação da Fase 1 do projeto.', content: '(Consolidação e Comunicação)', resources: 'Laboratório, Ferramentas de apresentação', intervention: '"Como vocês podem demonstrar o funcionamento de cada endpoint da API de forma clara?"' },
+            { day: '27', strategies: '**Avaliação Somativa (Parcial):** Apresentação da API com o CRUD de Food Trucks e Cardápios funcionando.', content: '(Recapitulação de todos os conhecimentos do semestre)', resources: 'Sala de aula, Datashow', intervention: '"Qual foi o maior desafio técnico que sua equipe enfrentou e como o superaram?"' },
+            { day: '28', strategies: 'Feedback da avaliação, retrospectiva do semestre e introdução aos temas do próximo semestre.', content: '(Fechamento e Transição)', resources: 'Sala de aula', intervention: '"Com base no que aprendemos, o que vocês esperam para a próxima fase do projeto?"' }
         ],
         semester3: [
-            { day: '21', completed: false, strategies: 'Revisão dos conceitos do 2º semestre e apresentação da Fase 2 da Situação de Aprendizagem.', content: '<b>Revisão:</b> CRUD com DRF, Testes.', resources: 'Sala de aula, Datashow', intervention: '"Quais pontos do projeto anterior precisam de melhoria?"' },
-            { day: '22', completed: false, strategies: 'Exposição dialogada: Segurança e Autenticação.<br>Introdução a senhas com hash e o conceito de JWT.', content: '<b>Segurança:</b> Hashing de Senhas, JWT.', resources: 'Sala de aula, Datashow', intervention: '"Por que nunca devemos salvar senhas em texto puro?"' },
-            { day: '23', completed: false, strategies: 'Atividade prática: Adicionar o model de Usuário (customizado) e instalar o `djangorestframework-simplejwt`.', content: '<b>Autenticação:</b> Custom User Model, Simple JWT.', resources: 'Laboratório de Informática, VS Code', intervention: '"Por que usar um modelo de usuário customizado desde o início é uma boa prática?"' },
-            { day: '24', completed: false, strategies: 'Atividade prática: Implementar as rotas para obter e atualizar tokens JWT.', content: '<b>Autenticação:</b> Endpoints de Token com Simple JWT.', resources: 'Laboratório de Informática, VS Code, Postman', intervention: '"O que são os tokens de acesso e de atualização (refresh)?"' },
-            { day: '25', completed: false, strategies: 'Exposição dialogada: Permissões no DRF.<br>Atividade prática: Proteger os endpoints de escrita (POST, PUT, DELETE) para que apenas administradores possam usá-los.', content: '<b>DRF:</b> Permissões (`IsAuthenticated`, `IsAdminUser`).', resources: 'Laboratório de Informática, VS Code, Postman', intervention: '"Como podemos criar permissões customizadas, por exemplo, para o dono do food truck?"' },
-            { day: '26', completed: false, strategies: '**Avaliação Formativa:** Implementar o endpoint de registro de novos usuários.', content: '<b>Autenticação:</b> Rota de Registro de Usuários.', resources: 'Laboratório de Informática, VS Code', intervention: 'Discussão sobre segurança no registro, como validação de e-mail.' },
-            { day: '27', completed: false, strategies: 'Exposição dialogada: Relacionamentos Muitos-para-Muitos.<br>Atividade prática: Modelar e implementar o sistema de "Favoritos".', content: '<b>Django Models:</b> Relacionamentos `ManyToManyField`.', resources: 'Laboratório de Informática, VS Code', intervention: '"Como a tabela de favoritos implementa um relacionamento N:M?"' },
-            { day: '28', completed: false, strategies: '**Avaliação Formativa:** Implementar os endpoints seguros para um usuário favoritar e desfavoritar um food truck.', content: '<b>Regras de Negócio:</b> Implementação de funcionalidades seguras.', resources: 'Laboratório de Informática, VS Code, Postman', intervention: 'Acompanhamento da lógica de proteção de rotas e manipulação de relacionamentos.' },
-            { day: '29', completed: false, strategies: 'Atividade prática: Implementar a lógica para avaliações de food trucks (relacionamento 1-N).', content: '<b>Regras de Negócio:</b> Sistema de Avaliações.', resources: 'Laboratório de Informática, VS Code', intervention: 'Discussão sobre como calcular a média de avaliações de forma eficiente.' },
-            { day: '30', completed: false, strategies: 'Exposição dialogada: Upload de Arquivos no Django.<br>Atividade prática: Configurar `MEDIA_ROOT` e `MEDIA_URL` para upload de imagens.', content: '<b>Uploads:</b> Gerenciamento de arquivos estáticos e de mídia.', resources: 'Laboratório de Informática, VS Code', intervention: '"Quais cuidados de segurança devemos ter ao permitir uploads de arquivos?"' },
-            { day: '31', completed: false, strategies: '**Avaliação Formativa:** Implementar o endpoint para upload da foto de um prato do cardápio.', content: '<b>Uploads:</b> Implementação prática com DRF.', resources: 'Laboratório de Informática, VS Code, Postman', intervention: 'Suporte na configuração e teste do upload de imagens.' },
-            { day: '32', completed: false, strategies: 'Exposição dialogada: Variáveis de Ambiente.<br>Atividade prática: Refatorar o código para usar `.env` para segredos (SECRET_KEY, banco de dados).', content: '<b>Deploy:</b> Variáveis de Ambiente (`python-decouple`).', resources: 'Laboratório de Informática, VS Code', intervention: '"Por que nunca devemos colocar senhas no código e versioná-las no Git?"' },
-            { day: '33', completed: false, strategies: 'Exposição dialogada: Introdução ao Deploy.<br>Apresentação de plataformas de nuvem (Render, Heroku).', content: '<b>Deploy:</b> Conceitos de Implantação, WSGI (Gunicorn).', resources: 'Sala de aula, Datashow', intervention: '"O que acontece quando fazemos o "deploy" de uma aplicação Django?"' },
-            { day: '34', completed: false, strategies: '**Avaliação Somativa:** Preparar a API para o deploy (configurar Gunicorn, Whitenoise, `requirements.txt`).', content: '<b>Deploy:</b> Preparação da Aplicação.', resources: 'Laboratório de Informática, VS Code', intervention: '"Por que o servidor de desenvolvimento do Django não é usado em produção?"' },
-            { day: '35', completed: false, strategies: '**Avaliação Somativa:** Realizar o deploy da API em uma plataforma de nuvem e apresentar o projeto final.', content: '<b>Deploy:</b> Implantação em Nuvem e Apresentação Final.', resources: 'Laboratório de Informática, Conta na plataforma de deploy', intervention: 'Suporte individualizado no processo de deploy e na preparação da apresentação.' }
+            { day: '29', strategies: 'Revisão do projeto da Fase 1. Apresentação da Fase 2 do desafio. Exposição dialogada: Segurança, Hashing de Senhas e JWT.', content: '<b>4. POO:</b> (Revisão). <br><b>Segurança:</b> Hashing, Autenticação, Autorização.', resources: 'Sala de aula, Datashow', intervention: '"Por que nunca, sob nenhuma circunstância, devemos salvar senhas em texto puro no banco de dados?"' },
+            { day: '30', strategies: '**Avaliação Formativa:** Atividade prática: Implementar as rotas de cadastro (`/register`) e login (`/login`) de usuários.', content: '<b>8. Persistência de dados:</b> 8.2. CRUD (para usuários).', resources: 'Laboratório, VS Code, Postman', intervention: '"O que o servidor deve retornar ao cliente após um login bem-sucedido para que ele se mantenha autenticado?"' },
+            { day: '31', strategies: 'Atividade prática: Criar um middleware de autenticação que verifica o token JWT.', content: '<b>3. Protocolo HTTP:</b> 3.4.8. Cabeçalho HTTP Authorization.', resources: 'Laboratório, VS Code, Postman', intervention: '"Como o middleware intercepta uma requisição antes de chegar ao controller final? Qual o papel do `next()`?"' },
+            { day: '32', strategies: 'Atividade prática: Aplicar o middleware de proteção nas rotas de CRUD que exigem login.', content: '(Aplicação de Segurança)', resources: 'Laboratório, VS Code, Postman', intervention: '"O que deve acontecer se um usuário tentar acessar uma rota protegida sem um token válido?"' },
+            { day: '33', strategies: 'Atividade prática: Implementar as funcionalidades de "favoritar" e "avaliar" food trucks (requer autenticação).', content: '(Aplicação de CRUD em relacionamentos)', resources: 'Laboratório, VS Code, Postman', intervention: '"Como a ID do usuário logado (extraída do token) é usada para registrar um novo favorito no banco de dados?"' },
+            { day: '34', strategies: 'Exposição dialogada e atividade prática: Transferência de arquivos (upload de imagens para os pratos do cardápio).', content: '<b>8. Persistência de dados:</b> 8.3. Transferência de arquivos locais para ambiente servidor.', resources: 'Laboratório, VS Code, Postman', intervention: '"Quais são os principais riscos de segurança ao permitir que usuários enviem arquivos para o nosso servidor?"' },
+            { day: '35', strategies: 'Exposição dialogada e atividade prática: Geração de relatórios e manipulação avançada de dados.', content: '<b>8. Persistência de dados:</b> 8.4. Geração de relatórios.', resources: 'Laboratório, VS Code', intervention: '"Como poderíamos gerar um PDF com os food trucks mais bem avaliados do mês?"' },
+            { day: '36', strategies: 'Exposição dialogada e atividade prática: Banco de dados de memória (ex: Redis) para cache.', content: '<b>8. Persistência de dados:</b> 8.7. Banco de dados de memória.', resources: 'Laboratório, VS Code, Redis', intervention: '"Em que situações usar um cache de memória pode melhorar drasticamente a performance da nossa API?"' },
+            { day: '37', strategies: 'Exposição dialogada e atividade prática: Envio de notificações (ex: email de boas-vindas).', content: '<b>Envio de notificações entre cliente e servidor</b>', resources: 'Laboratório, VS Code', intervention: '"Qual a diferença entre uma notificação síncrona e uma assíncrona? Qual é melhor para enviar emails?"' },
+            { day: '38', strategies: 'Exposição dialogada: Documentação de API com Swagger. Atividade prática: Implementar Swagger no projeto.', content: '<b>5. Documentação:</b> 5.2. Documentação de API (5.2.1. Swagger).', resources: 'Laboratório, VS Code', intervention: '"Como o Swagger pode gerar uma documentação interativa automaticamente a partir do nosso código?"' },
+            { day: '39', strategies: 'Dia de trabalho focado no projeto: Integração de todas as funcionalidades da Fase 2.', content: '(Consolidação e Integração)', resources: 'Laboratório, VS Code, Postman', intervention: 'Sessão de depuração em grupo para resolver problemas de integração entre as novas funcionalidades.' },
+            { day: '40', strategies: 'Dia de trabalho focado no projeto: Refatoração e otimização do código.', content: '(Qualidade de Código)', resources: 'Laboratório, VS Code', intervention: 'Acompanhamento individual para aplicar os princípios de Clean Code em todo o projeto.' },
+            { day: '41', strategies: 'Exposição dialogada: Implantação (Deploy). Atividade prática: Configurar variáveis de ambiente (`.env`) e preparar o projeto.', content: '<b>9. Publicação da aplicação desenvolvida.</b>', resources: 'Laboratório, VS Code', intervention: '"Por que o arquivo `.env` nunca deve ser enviado para o GitHub?"' },
+            { day: '42', strategies: '**Avaliação Somativa (Final):** Realizar o deploy da API completa em um serviço de nuvem (ex: Render, Heroku).', content: '(Deploy)', resources: 'Laboratório, Conta em serviço de nuvem', intervention: 'Suporte individualizado no processo de deploy, resolvendo problemas de configuração e ambiente.' },
+            { day: '43', strategies: 'Dia de trabalho no projeto: Finalizar documentação e testes pós-deploy.', content: '(Testes Finais e Documentação)', resources: 'Laboratório, VS Code, Postman', intervention: 'Suporte para garantir que a API está funcional e bem documentada na nuvem.' },
+            { day: '44', strategies: 'Preparação da apresentação final do projeto completo.', content: '(Consolidação e Comunicação)', resources: 'Laboratório, Ferramentas de apresentação', intervention: '"Como vocês podem demonstrar a evolução da API do primeiro para o segundo semestre de forma impactante?"' },
+            { day: '45', strategies: '**Apresentação Final:** Apresentação da API completa e funcional. Feedback do docente e da turma. Fechamento da UC.', content: '(Recapitulação de todos os conhecimentos)', resources: 'Sala de aula, Datashow', intervention: '"Qual foi a capacidade, técnica ou socioemocional, mais importante que vocês desenvolveram neste projeto?"' }
         ]
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const storageKey = 'senaiBackendState_python_v1';
-
     const views = {
         overview: document.getElementById('view-overview'),
         skills: document.getElementById('view-skills'),
         schedule: document.getElementById('view-schedule'),
     };
-
     const navButtons = {
         overview: document.getElementById('nav-overview'),
         skills: document.getElementById('nav-skills'),
         schedule: document.getElementById('nav-schedule'),
     };
-    
     const semesterButtons = {
         2: document.getElementById('semester-2'),
         3: document.getElementById('semester-3'),
     };
-
     const scheduleGrids = {
         2: document.getElementById('schedule-grid-2'),
         3: document.getElementById('schedule-grid-3'),
     };
-
-    const technicalSkillsContainer = document.getElementById('technical-skills-container');
-    const softSkillsContainer = document.getElementById('soft-skills-container');
     const modal = document.getElementById('schedule-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
     const modalClose = document.getElementById('modal-close');
-    const pdfDownloadBtn = document.getElementById('pdf-download-btn');
 
-    let currentSemester = 2;
-
-    function loadScheduleState() {
-        try {
-            const savedState = localStorage.getItem(storageKey);
-            if (savedState) {
-                const completedDays = JSON.parse(savedState);
-                AppData.schedule.semester2.forEach(day => {
-                    if (completedDays.includes(day.day)) day.completed = true;
-                });
-                AppData.schedule.semester3.forEach(day => {
-                    if (completedDays.includes(day.day)) day.completed = true;
-                });
-            }
-        } catch (e) {
-            console.error("Failed to load schedule state:", e);
-        }
+    function switchView(viewName) {
+        Object.values(views).forEach(view => view.classList.add('hidden'));
+        Object.values(navButtons).forEach(btn => btn.classList.remove('active'));
+        views[viewName].classList.remove('hidden');
+        navButtons[viewName].classList.add('active');
     }
 
-    function saveScheduleState() {
-        try {
-            const s2_completed = AppData.schedule.semester2.filter(d => d.completed).map(d => d.day);
-            const s3_completed = AppData.schedule.semester3.filter(d => d.completed).map(d => d.day);
-            const allCompleted = [...s2_completed, ...s3_completed];
-            localStorage.setItem(storageKey, JSON.stringify(allCompleted));
-        } catch (e) {
-            console.error("Failed to save schedule state:", e);
-        }
+    function switchSemester(semester) {
+        Object.values(semesterButtons).forEach(btn => btn.classList.remove('active'));
+        Object.values(scheduleGrids).forEach(grid => grid.classList.add('hidden'));
+        semesterButtons[semester].classList.add('active');
+        scheduleGrids[semester].classList.remove('hidden');
     }
 
     function renderSchedule(semester) {
@@ -323,334 +254,61 @@ document.addEventListener('DOMContentLoaded', () => {
         const scheduleData = AppData.schedule[`semester${semester}`];
         grid.innerHTML = '';
         scheduleData.forEach(dayData => {
-            const dayCard = document.createElement('div');
-            dayCard.className = 'day-card relative bg-white p-4 rounded-lg shadow hover:shadow-md hover:-translate-y-1 transition-all text-center border-2 border-transparent';
-            if (dayData.completed) {
-                dayCard.classList.add('completed');
-            }
+            const dayCard = document.createElement('button');
+            dayCard.className = 'day-card bg-white p-4 rounded-lg shadow hover:shadow-md hover:-translate-y-1 transition-all text-center border-2 border-transparent hover:border-sky-500';
             dayCard.dataset.day = dayData.day;
-            dayCard.dataset.semester = semester;
-
-            dayCard.innerHTML = `
-                <div class="day-content pt-4">
-                    <div class="font-bold text-lg text-slate-800">Dia ${dayData.day}</div>
-                </div>
-                <button class="complete-btn" title="Marcar como concluído">
-                    <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                </button>
-            `;
+            dayCard.innerHTML = `<div class="font-bold text-lg text-slate-800">Dia ${dayData.day}</div>`;
             grid.appendChild(dayCard);
         });
-    }
-    
-    function switchSemester(semester) {
-        currentSemester = semester;
-        Object.values(semesterButtons).forEach(btn => btn.classList.remove('active'));
-        Object.values(scheduleGrids).forEach(grid => grid.classList.add('hidden'));
-        
-        semesterButtons[semester].classList.add('active');
-        scheduleGrids[semester].classList.remove('hidden');
-    }
-
-    Object.keys(semesterButtons).forEach(key => {
-        semesterButtons[key].addEventListener('click', () => switchSemester(key));
-    });
-
-
-    function switchView(viewName) {
-        Object.values(views).forEach(view => view.classList.add('hidden'));
-        Object.values(navButtons).forEach(btn => btn.classList.remove('active'));
-        
-        views[viewName].classList.remove('hidden');
-        navButtons[viewName].classList.add('active');
     }
 
     Object.keys(navButtons).forEach(key => {
         navButtons[key].addEventListener('click', () => switchView(key));
     });
 
-    function createAccordionItem(skill) {
-        const container = document.createElement('div');
-        container.className = 'border border-slate-200 rounded-lg';
-        
-        const header = document.createElement('button');
-        header.className = 'w-full text-left p-4 flex justify-between items-center hover:bg-slate-50 transition-colors';
-        header.innerHTML = `
-            <span class="font-medium text-slate-800">${skill.name}</span>
-            <svg class="w-5 h-5 text-slate-500 transition-transform transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-        `;
-
-        const content = document.createElement('div');
-        content.className = 'p-4 border-t border-slate-200 bg-slate-50 text-slate-600 hidden leading-relaxed';
-        content.innerHTML = skill.criteria;
-
-        header.addEventListener('click', () => {
-            content.classList.toggle('hidden');
-            header.querySelector('svg').classList.toggle('rotate-180');
-        });
-
-        container.appendChild(header);
-        container.appendChild(content);
-        return container;
-    }
-    
-    AppData.skills.technical.forEach(skill => {
-        technicalSkillsContainer.appendChild(createAccordionItem(skill));
-    });
-
-    AppData.skills.soft.forEach(skill => {
-        softSkillsContainer.appendChild(createAccordionItem(skill));
+    Object.keys(semesterButtons).forEach(key => {
+        semesterButtons[key].addEventListener('click', () => switchSemester(key));
     });
 
     [scheduleGrids[2], scheduleGrids[3]].forEach(grid => {
         grid.addEventListener('click', (e) => {
             const card = e.target.closest('.day-card');
-            if (!card) return;
-
-            const day = card.dataset.day;
-            const semester = card.dataset.semester;
-            const dayData = AppData.schedule[`semester${semester}`].find(d => d.day === day);
-
-            if (e.target.closest('.complete-btn')) {
-                dayData.completed = !dayData.completed;
-                card.classList.toggle('completed');
-                saveScheduleState();
-            } else if (e.target.closest('.day-content')) {
-                if (dayData) {
-                    openModal(dayData);
-                }
+            if (card) {
+                const day = card.dataset.day;
+                const semester = card.parentElement.id.includes('2') ? 2 : 3;
+                const dayData = AppData.schedule[`semester${semester}`].find(d => d.day === day);
+                if (dayData) openModal(dayData);
             }
         });
     });
-
 
     function openModal(data) {
         modalTitle.textContent = `Detalhes da Aula - Dia ${data.day}`;
         modalBody.innerHTML = `
             <div class="space-y-6">
-                <div>
-                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Estratégias de Ensino</h4>
-                    <div class="text-slate-600 pl-4 border-l-4 border-sky-200">${data.strategies}</div>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Conteúdo Formativo</h4>
-                    <div class="text-slate-600 pl-4 border-l-4 border-emerald-200">${data.content}</div>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Recursos / Ambientes</h4>
-                    <div class="text-slate-600 pl-4 border-l-4 border-amber-200">${data.resources}</div>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg text-slate-800 mb-2">Intervenção Mediadora</h4>
-                    <div class="text-slate-600 pl-4 border-l-4 border-rose-200 italic">"${data.intervention}"</div>
-                </div>
+                <div><h4 class="font-semibold text-lg text-slate-800 mb-2">Estratégias de Ensino</h4><div class="text-slate-600 pl-4 border-l-4 border-sky-200">${data.strategies}</div></div>
+                <div><h4 class="font-semibold text-lg text-slate-800 mb-2">Conteúdo Formativo</h4><div class="text-slate-600 pl-4 border-l-4 border-emerald-200">${data.content}</div></div>
+                <div><h4 class="font-semibold text-lg text-slate-800 mb-2">Recursos / Ambientes</h4><div class="text-slate-600 pl-4 border-l-4 border-amber-200">${data.resources}</div></div>
+                <div><h4 class="font-semibold text-lg text-slate-800 mb-2">Intervenção Mediadora</h4><div class="text-slate-600 pl-4 border-l-4 border-rose-200 italic">"${data.intervention}"</div></div>
             </div>
         `;
         modal.classList.remove('hidden');
         setTimeout(() => {
             modal.classList.add('opacity-100');
-            const content = modal.querySelector('.modal-content');
-            if (content) {
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }
+            modal.querySelector('.modal-content').classList.remove('scale-95');
         }, 10);
     }
 
     function closeModal() {
         modal.classList.remove('opacity-100');
-        const content = modal.querySelector('.modal-content');
-        if (content) {
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-        }
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
+        modal.querySelector('.modal-content').classList.add('scale-95');
+        setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
     modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-    
-    function cleanHtml(str) {
-        return str.replace(/<br>/g, '\n').replace(/<b>/g, '').replace(/<\/b>/g, '').replace(/<i>/g, '').replace(/<\/i>/g, '');
-    }
-
-    async function downloadPDF() {
-        pdfDownloadBtn.classList.add('loading');
-        pdfDownloadBtn.disabled = true;
-
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-        
-        const addHeader = (doc, pageNumber, totalPages) => {
-            doc.setFontSize(12);
-            doc.setTextColor('#0f172a');
-            doc.text('Plano de Ensino: Programação Back-end', 15, 10);
-            doc.setFontSize(10);
-            doc.setTextColor('#64748b');
-            doc.text(`Página ${pageNumber} de ${totalPages}`, doc.internal.pageSize.getWidth() - 15, 10, { align: 'right' });
-            doc.setDrawColor('#e2e8f0');
-            doc.line(15, 14, doc.internal.pageSize.getWidth() - 15, 14);
-        };
-
-        const addFooter = (doc) => {
-            const pageHeight = doc.internal.pageSize.getHeight();
-            doc.setFontSize(8);
-            doc.setTextColor('#64748b');
-            doc.text('Escola SENAI "Luiz Massa" 7.91', doc.internal.pageSize.getWidth() / 2, pageHeight - 10, { align: 'center' });
-        };
-        
-        let y = 30;
-        const margin = 15;
-        const maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
-
-        doc.setFontSize(22);
-        doc.setTextColor('#0f172a');
-        doc.text("Plano de Ensino: Programação Back-end", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
-        y += 15;
-
-        // Visão Geral
-        doc.setFontSize(16);
-        doc.setTextColor('#0ea5e9');
-        doc.text("1. Visão Geral", margin, y);
-        y += 10;
-        doc.setFontSize(10);
-        doc.setTextColor('#334155');
-        const overviewText = `
-Escola: Escola SENAI "Luiz Massa" 7.91
-Turma: Técnico em Desenvolvimento de Sistemas
-Módulo: MÓDULO ESPECÍFICO I e II
-Semestres: 2º (105h) e 3º (120h)
-Carga Horária Total: 225 horas
-        `.trim();
-        doc.text(overviewText, margin, y);
-        y += 40;
-
-        // Situação de Aprendizagem
-        doc.setFontSize(14);
-        doc.setTextColor('#0ea5e9');
-        doc.text("Situação de Aprendizagem: API Evolutiva para o 'GastroAvaré Finder'", margin, y);
-        y += 8;
-        doc.setFontSize(10);
-        const situationText = doc.splitTextToSize(
-`A startup "InovaApp Solutions" precisa de uma equipe de desenvolvedores back-end para construir a "espinha dorsal" do seu novo aplicativo, o "GastroAvaré Finder". O projeto será dividido em duas fases, acompanhando os semestres.
-
-Fase 1 (2º Semestre): Fundamentos da API com Django
-- Modelar e criar o banco de dados inicial.
-- Desenvolver uma API RESTful usando Python, Django e Django REST Framework.
-- Implementar endpoints de CRUD para os food trucks e seus cardápios.
-- Escrever testes unitários para garantir a qualidade da API.
-
-Fase 2 (3º Semestre): Funcionalidades Avançadas e Deploy
-- Implementar um sistema de autenticação e autorização com Simple JWT.
-- Desenvolver endpoints seguros para que usuários possam favoritar e avaliar food trucks.
-- Implementar funcionalidade de upload de imagens para os pratos do cardápio.
-- Preparar e implantar (deploy) a aplicação em um serviço de nuvem.`, maxWidth);
-        doc.text(situationText, margin, y);
-        y += doc.getTextDimensions(situationText).h + 10;
-        
-        // Competências
-        doc.addPage();
-        y = 30;
-        doc.setFontSize(16);
-        doc.setTextColor('#0ea5e9');
-        doc.text("2. Competências", margin, y);
-        y += 10;
-        doc.setFontSize(14);
-        doc.setTextColor('#1e293b');
-        doc.text("Capacidades Técnicas", margin, y);
-        y += 8;
-        doc.setFontSize(10);
-        AppData.skills.technical.forEach(skill => {
-            if (y > 260) { doc.addPage(); y = 30; }
-            doc.setFont(undefined, 'bold');
-            doc.text(`- ${skill.name}`, margin, y, { maxWidth: maxWidth });
-            y += doc.getTextDimensions(`- ${skill.name}`, { maxWidth: maxWidth }).h;
-            doc.setFont(undefined, 'normal');
-            const criteriaText = doc.splitTextToSize(cleanHtml(skill.criteria), maxWidth - 5);
-            doc.text(criteriaText, margin + 5, y);
-            y += doc.getTextDimensions(criteriaText).h + 6;
-        });
-
-        y += 10;
-        if (y > 260) { doc.addPage(); y = 30; }
-        doc.setFontSize(14);
-        doc.setTextColor('#1e293b');
-        doc.text("Capacidades Socioemocionais", margin, y);
-        y += 8;
-        doc.setFontSize(10);
-        AppData.skills.soft.forEach(skill => {
-            if (y > 260) { doc.addPage(); y = 30; }
-            doc.setFont(undefined, 'bold');
-            doc.text(`- ${skill.name}`, margin, y, { maxWidth: maxWidth });
-            y += doc.getTextDimensions(`- ${skill.name}`, { maxWidth: maxWidth }).h;
-            doc.setFont(undefined, 'normal');
-            const criteriaText = doc.splitTextToSize(cleanHtml(skill.criteria), maxWidth - 5);
-            doc.text(criteriaText, margin + 5, y);
-            y += doc.getTextDimensions(criteriaText).h + 6;
-        });
-
-        // Cronograma
-        doc.addPage();
-        y = 30;
-        doc.setFontSize(16);
-        doc.setTextColor('#0ea5e9');
-        doc.text("3. Cronograma - 2º Semestre", margin, y);
-        
-        const head = [['Dia', 'Estratégias', 'Conteúdo', 'Recursos', 'Intervenção']];
-        const body2 = AppData.schedule.semester2.map(d => [d.day, cleanHtml(d.strategies), cleanHtml(d.content), cleanHtml(d.resources), cleanHtml(d.intervention)]);
-        
-        doc.autoTable({
-            startY: y + 5,
-            head: head,
-            body: body2,
-            theme: 'grid',
-            headStyles: { fillColor: [14, 165, 233] },
-            styles: { fontSize: 8, cellPadding: 2, lineColor: '#cbd5e1', lineWidth: 0.1 },
-            columnStyles: { 0: { cellWidth: 10 } }
-        });
-
-        doc.addPage();
-        y = 30;
-        doc.setFontSize(16);
-        doc.setTextColor('#0ea5e9');
-        doc.text("3. Cronograma - 3º Semestre", margin, y);
-        
-        const body3 = AppData.schedule.semester3.map(d => [d.day, cleanHtml(d.strategies), cleanHtml(d.content), cleanHtml(d.resources), cleanHtml(d.intervention)]);
-
-        doc.autoTable({
-            startY: y + 5,
-            head: head,
-            body: body3,
-            theme: 'grid',
-            headStyles: { fillColor: [14, 165, 233] },
-            styles: { fontSize: 8, cellPadding: 2, lineColor: '#cbd5e1', lineWidth: 0.1 },
-            columnStyles: { 0: { cellWidth: 10 } }
-        });
-
-        const totalPages = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= totalPages; i++) {
-            doc.setPage(i);
-            addHeader(doc, i, totalPages);
-            addFooter(doc);
-        }
-
-        doc.save('Plano_de_Ensino_Backend_Python.pdf');
-        
-        pdfDownloadBtn.classList.remove('loading');
-        pdfDownloadBtn.disabled = false;
-    }
-
-    pdfDownloadBtn.addEventListener('click', downloadPDF);
-
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
     // Initial Load
-    loadScheduleState();
     renderSchedule(2);
     renderSchedule(3);
 });
