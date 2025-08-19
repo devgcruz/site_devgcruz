@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostila Interativa: POO em Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A single-page application divided into three thematic, scrollable sections: 1) "O que é POO?", 2) "Classes", and 3) "Objetos". This structure follows a logical learning path from high-level theory to practical implementation. The key interaction is a simulator in the "Objetos" section where users can visually instantiate objects from a class and call their methods, providing a hands-on learning experience that is more effective than reading static code. A sticky navigation bar allows easy movement between these core concepts. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: 4 Pillars of OOP -> Goal: Inform/Organize -> Viz/Presentation: Interactive Cards -> Interaction: Click to reveal details -> Justification: More engaging and less overwhelming than a long list. -> Library/Method: HTML/CSS/JS.
+        - Report Info: Class Syntax -> Goal: Inform -> Viz/Presentation: Styled Code Block with clickable lines -> Interaction: Click on a line to open a modal with an explanation and analogy. -> Justification: Provides context-sensitive help and reinforces learning by connecting code to real-world concepts. -> Library/Method: HTML/Tailwind/JS.
+        - Report Info: Dog Class/Object Example -> Goal: Demonstrate Instantiation & Methods -> Viz/Presentation: Interactive Simulator -> Interaction: Buttons to create objects and call methods, with dynamic output display. -> Justification: Actively demonstrates the cause-and-effect of OOP principles, solidifying user understanding. -> Library/Method: Vanilla JS DOM Manipulation.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .pillar-card-back {
+            transform: rotateY(180deg);
+        }
+        .pillar-card.flipped .pillar-card-inner {
+            transform: rotateY(180deg);
+        }
+        .pillar-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .pillar-card-front, .pillar-card-back {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .code-line {
+            display: block;
+            cursor: pointer;
+            padding: 2px 8px;
+            margin: 0 -8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .code-line:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
+        }
+        .modal-leave {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-leave-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-emerald-700">POO com Python</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#definicao" class="text-stone-600 hover:text-emerald-600 transition-colors">Definição</a>
+                <a href="#classes" class="text-stone-600 hover:text-emerald-600 transition-colors">Classes</a>
+                <a href="#objetos" class="text-stone-600 hover:text-emerald-600 transition-colors">Objetos</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Seção 1: Definição de POO -->
+        <section id="definicao" class="mb-20 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-4 text-center">4.1. O que é Programação Orientada a Objetos?</h2>
+            <p class="max-w-3xl mx-auto text-center text-stone-600 mb-12">
+                É um paradigma que organiza o software em torno de "objetos", que contêm dados (atributos) e comportamentos (métodos). A ideia é trazer conceitos do mundo real para o código, tornando-o mais intuitivo e reutilizável.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Pilares da POO -->
+                <div class="pillar-card" onclick="this.classList.toggle('flipped')">
+                    <div class="pillar-card-inner relative w-full h-64 rounded-lg shadow-lg cursor-pointer">
+                        <div class="pillar-card-front absolute w-full h-full bg-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <span class="text-5xl mb-4">🎨</span>
+                            <h3 class="text-xl font-bold text-emerald-700">Abstração</h3>
+                            <p class="text-sm text-stone-500 mt-2">(Clique para saber mais)</p>
+                        </div>
+                        <div class="pillar-card-back absolute w-full h-full bg-emerald-700 text-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-xl font-bold mb-2">Abstração</h3>
+                            <p class="text-sm">Focar no essencial, ignorando detalhes irrelevantes. Você dirige um carro sem precisar conhecer a mecânica do motor.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pillar-card" onclick="this.classList.toggle('flipped')">
+                    <div class="pillar-card-inner relative w-full h-64 rounded-lg shadow-lg cursor-pointer">
+                        <div class="pillar-card-front absolute w-full h-full bg-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <span class="text-5xl mb-4">📦</span>
+                            <h3 class="text-xl font-bold text-emerald-700">Encapsulamento</h3>
+                            <p class="text-sm text-stone-500 mt-2">(Clique para saber mais)</p>
+                        </div>
+                        <div class="pillar-card-back absolute w-full h-full bg-emerald-700 text-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-xl font-bold mb-2">Encapsulamento</h3>
+                            <p class="text-sm">Agrupar dados e métodos que operam nesses dados dentro de uma classe, protegendo-os de acesso externo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pillar-card" onclick="this.classList.toggle('flipped')">
+                    <div class="pillar-card-inner relative w-full h-64 rounded-lg shadow-lg cursor-pointer">
+                        <div class="pillar-card-front absolute w-full h-full bg-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <span class="text-5xl mb-4">🔗</span>
+                            <h3 class="text-xl font-bold text-emerald-700">Herança</h3>
+                            <p class="text-sm text-stone-500 mt-2">(Clique para saber mais)</p>
+                        </div>
+                        <div class="pillar-card-back absolute w-full h-full bg-emerald-700 text-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-xl font-bold mb-2">Herança</h3>
+                            <p class="text-sm">Permitir que uma classe filha herde atributos e métodos de uma classe mãe, promovendo a reutilização de código.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pillar-card" onclick="this.classList.toggle('flipped')">
+                    <div class="pillar-card-inner relative w-full h-64 rounded-lg shadow-lg cursor-pointer">
+                        <div class="pillar-card-front absolute w-full h-full bg-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <span class="text-5xl mb-4">🎭</span>
+                            <h3 class="text-xl font-bold text-emerald-700">Polimorfismo</h3>
+                            <p class="text-sm text-stone-500 mt-2">(Clique para saber mais)</p>
+                        </div>
+                        <div class="pillar-card-back absolute w-full h-full bg-emerald-700 text-white rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-xl font-bold mb-2">Polimorfismo</h3>
+                            <p class="text-sm">Permitir que objetos de diferentes classes respondam à mesma mensagem de formas específicas para cada um.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 2: Classes -->
+        <section id="classes" class="mb-20 scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-4 text-center">4.3. Classes: A Planta Baixa</h2>
+            <p class="max-w-3xl mx-auto text-center text-stone-600 mb-12">
+                Uma classe é o molde para criar objetos. Ela define os atributos (características) e métodos (ações) que seus objetos terão. É a receita do bolo, não o bolo em si. <strong class="text-emerald-600">Clique em uma linha de código para ver a explicação.</strong>
+            </p>
+            <div class="max-w-2xl mx-auto bg-stone-800 rounded-lg shadow-lg p-6">
+                <pre><code id="code-block" class="text-white">
+<span class="code-line" data-explanation="Esta linha define o início de uma nova classe chamada 'Cachorro'. A classe serve como um molde para criar objetos." data-analogy="Pense nisso como o título da planta de uma casa. Estamos declarando: 'Aqui começa o projeto para construir qualquer casa do tipo Cachorro'.">class Cachorro:</span>
+<span class="code-line" data-explanation="Este é o método construtor. Ele é executado automaticamente sempre que um novo objeto 'Cachorro' é criado. 'self' se refere ao próprio objeto que está sendo criado." data-analogy="Esta é a lista de 'informações essenciais' que você precisa para construir a casa. Para cada nova casa (cachorro), você deve fornecer um nome, raça e idade.">    # O método __init__ é o construtor</span>
+<span class="code-line" data-explanation="Este é o método construtor. Ele é executado automaticamente sempre que um novo objeto 'Cachorro' é criado. 'self' se refere ao próprio objeto que está sendo criado." data-analogy="Esta é a lista de 'informações essenciais' que você precisa para construir a casa. Para cada nova casa (cachorro), você deve fornecer um nome, raça e idade.">    def __init__(self, nome, raca, idade):</span>
+<span class="code-line" data-explanation="Esta linha pega o valor 'nome' passado para o construtor e o armazena em um atributo chamado 'nome' dentro do objeto." data-analogy="É como pegar a cor da tinta ('nome') que o cliente pediu e aplicá-la na parede da casa ('self.nome'), guardando essa característica específica para esta casa.">        self.nome = nome</span>
+<span class="code-line" data-explanation="Armazena o valor 'raca' como um atributo do objeto." data-analogy="Define o 'estilo arquitetônico' ('raca') da casa, guardando essa informação no projeto daquela casa específica.">        self.raca = raca</span>
+<span class="code-line" data-explanation="Armazena o valor 'idade' como um atributo do objeto." data-analogy="Registra o 'ano de construção' ('idade') da casa.">        self.idade = idade</span>
+<span class="code-line"> </span>
+<span class="code-line" data-explanation="Define um método (uma ação) chamado 'latir'. Qualquer objeto 'Cachorro' poderá executar esta ação." data-analogy="Estamos projetando um 'sistema de campainha' ('latir') para a casa. Toda casa construída com esta planta terá essa funcionalidade.">    # Um método que define um comportamento</span>
+<span class="code-line" data-explanation="Define um método (uma ação) chamado 'latir'. Qualquer objeto 'Cachorro' poderá executar esta ação." data-analogy="Estamos projetando um 'sistema de campainha' ('latir') para a casa. Toda casa construída com esta planta terá essa funcionalidade.">    def latir(self):</span>
+<span class="code-line" data-explanation="Quando o método 'latir' é chamado, ele retorna um texto que inclui o nome específico do cachorro que está latindo." data-analogy="Quando a campainha toca, ela não faz um som genérico. Ela diz: 'A campainha da casa de {self.nome} está tocando', usando a informação específica daquela casa.">        return f"{self.nome} diz: Au au!"</span>
+<span class="code-line"> </span>
+<span class="code-line" data-explanation="Define um método que modifica um dos atributos do objeto: a idade." data-analogy="Isso é como instalar um 'sistema de calendário' que, quando ativado, adiciona um ano à 'data de construção' da casa.">    # Outro método que altera um atributo</span>
+<span class="code-line" data-explanation="Define um método que modifica um dos atributos do objeto: a idade." data-analogy="Isso é como instalar um 'sistema de calendário' que, quando ativado, adiciona um ano à 'data de construção' da casa.">    def fazer_aniversario(self):</span>
+<span class="code-line" data-explanation="Esta linha acessa o atributo 'idade' do próprio objeto e aumenta seu valor em 1." data-analogy="O sistema de calendário avança o 'ano de construção' em um, atualizando a idade da casa.">        self.idade += 1</span>
+<span class="code-line" data-explanation="Após atualizar a idade, o método retorna uma mensagem de confirmação com o nome e a nova idade do cachorro." data-analogy="Após a atualização, o sistema emite um comunicado: 'A casa de {self.nome} foi renovada e agora tem {self.idade} anos de existência'.">        return f"Parabéns, {self.nome}! {self.idade} anos."</span>
+                </code></pre>
+            </div>
+        </section>
+
+        <!-- Seção 3: Objetos -->
+        <section id="objetos" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-4 text-center">4.4. Objetos: A Construção Realizada</h2>
+            <p class="max-w-3xl mx-auto text-center text-stone-600 mb-12">
+                Um objeto é uma instância de uma classe. É a "casa construída" a partir da "planta baixa". A partir da classe <code class="bg-stone-200 px-1 rounded">Cachorro</code>, podemos criar vários objetos, cada um com suas próprias características. Interaja abaixo para ver como funciona!
+            </p>
+            
+            <div class="bg-white p-8 rounded-lg shadow-xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Painel de Controle -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Painel de Controle</h3>
+                        <div class="space-y-4">
+                            <button id="create-rex" class="w-full bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors shadow-md">
+                                1. Criar Objeto 'Rex'
+                            </button>
+                            <button id="create-luna" class="w-full bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors shadow-md">
+                                2. Criar Objeto 'Luna'
+                            </button>
+                            <button id="reset-sim" class="w-full bg-stone-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-stone-600 transition-colors shadow-md mt-8">
+                                Reiniciar Simulação
+                            </button>
+                        </div>
+                        <div id="console" class="mt-6 bg-stone-800 text-white font-mono text-sm p-4 rounded-lg h-48 overflow-y-auto">
+                            <p>&gt; Console de saída...</p>
+                        </div>
+                    </div>
+
+                    <!-- Área de Objetos -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Objetos Criados</h3>
+                        <div id="objects-area" class="space-y-4 min-h-[200px] bg-stone-50 p-4 rounded-lg border-2 border-dashed border-stone-300">
+                            <p class="text-stone-400 text-center pt-16">Aguardando criação de objetos...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Modal de Explicação de Código -->
+    <div id="code-explanation-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
+        <div id="modal-content" class="bg-white rounded-lg p-8 max-w-lg w-full shadow-2xl modal-enter">
+            <h4 class="font-bold text-lg mb-2 text-emerald-700">Explicação do Código</h4>
+            <p id="explanation-text" class="mb-4 text-stone-700"></p>
+            <h4 class="font-bold text-lg mb-2 text-emerald-700">Analogia</h4>
+            <p id="analogy-text" class="italic text-stone-600 border-l-4 border-emerald-200 pl-4"></p>
+            <button id="close-modal-btn" class="mt-6 w-full bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors">Entendi!</button>
+        </div>
+    </div>
+    
+    <footer class="text-center py-8 text-stone-500">
+        <p>Apostila Interativa de POO - 2025</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Lógica do Simulador de Objetos ---
+            const consoleEl = document.getElementById('console');
+            const objectsArea = document.getElementById('objects-area');
+            const createRexBtn = document.getElementById('create-rex');
+            const createLunaBtn = document.getElementById('create-luna');
+            const resetBtn = document.getElementById('reset-sim');
+            let rex = null;
+            let luna = null;
+
+            const logToConsole = (message) => {
+                consoleEl.innerHTML += `<p>&gt; ${message}</p>`;
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            };
+
+            const renderObjects = () => {
+                objectsArea.innerHTML = '';
+                let hasObjects = false;
+                if (rex) {
+                    hasObjects = true;
+                    objectsArea.innerHTML += createObjectCard(rex);
+                }
+                if (luna) {
+                    hasObjects = true;
+                    objectsArea.innerHTML += createObjectCard(luna);
+                }
+                if (!hasObjects) {
+                     objectsArea.innerHTML = '<p class="text-stone-400 text-center pt-16">Aguardando criação de objetos...</p>';
+                }
+                addCardEventListeners();
+            };
+
+            const createObjectCard = (dog) => {
+                return `
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-stone-200">
+                        <p class="font-bold text-lg text-emerald-700">${dog.nome}</p>
+                        <p class="text-sm text-stone-600"><strong>Raça:</strong> ${dog.raca}</p>
+                        <p class="text-sm text-stone-600"><strong>Idade:</strong> <span id="idade-${dog.nome}">${dog.idade}</span></p>
+                        <div class="mt-3 flex space-x-2">
+                            <button data-dog="${dog.nome}" data-action="latir" class="action-btn flex-1 bg-sky-500 text-white text-sm py-1 px-2 rounded hover:bg-sky-600 transition">Latir</button>
+                            <button data-dog="${dog.nome}" data-action="aniversario" class="action-btn flex-1 bg-amber-500 text-white text-sm py-1 px-2 rounded hover:bg-amber-600 transition">Fazer Aniversário</button>
+                        </div>
+                    </div>
+                `;
+            };
+
+            const addCardEventListeners = () => {
+                document.querySelectorAll('.action-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const dogName = e.target.dataset.dog;
+                        const action = e.target.dataset.action;
+                        const dog = dogName === 'Rex' ? rex : luna;
+                        if (action === 'latir') {
+                            logToConsole(`${dog.nome} diz: Au au!`);
+                        } else if (action === 'aniversario') {
+                            dog.idade++;
+                            document.getElementById(`idade-${dog.nome}`).textContent = dog.idade;
+                            logToConsole(`Parabéns, ${dog.nome}! Agora você tem ${dog.idade} anos.`);
+                        }
+                    });
+                });
+            };
+
+            createRexBtn.addEventListener('click', () => {
+                if (!rex) {
+                    rex = { nome: 'Rex', raca: 'Pastor Alemão', idade: 2 };
+                    logToConsole("Objeto 'Rex' criado!");
+                    renderObjects();
+                    createRexBtn.disabled = true;
+                    createRexBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            });
+
+            createLunaBtn.addEventListener('click', () => {
+                if (!luna) {
+                    luna = { nome: 'Luna', raca: 'Golden Retriever', idade: 4 };
+                    logToConsole("Objeto 'Luna' criado!");
+                    renderObjects();
+                    createLunaBtn.disabled = true;
+                    createLunaBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            });
+
+            resetBtn.addEventListener('click', () => {
+                rex = null;
+                luna = null;
+                consoleEl.innerHTML = '<p>&gt; Console de saída...</p>';
+                logToConsole('Simulação reiniciada.');
+                renderObjects();
+                createRexBtn.disabled = false;
+                createRexBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                createLunaBtn.disabled = false;
+                createLunaBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+
+            // --- Lógica do Modal de Explicação de Código ---
+            const modal = document.getElementById('code-explanation-modal');
+            const modalContent = document.getElementById('modal-content');
+            const explanationText = document.getElementById('explanation-text');
+            const analogyText = document.getElementById('analogy-text');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const codeBlock = document.getElementById('code-block');
+
+            const openModal = (explanation, analogy) => {
+                explanationText.textContent = explanation;
+                analogyText.textContent = analogy;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                modalContent.classList.remove('modal-leave', 'modal-leave-active');
+                modalContent.classList.add('modal-enter-active');
+            };
+
+            const closeModal = () => {
+                modalContent.classList.remove('modal-enter-active');
+                modalContent.classList.add('modal-leave-active');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 300);
+            };
+
+            codeBlock.addEventListener('click', (e) => {
+                const line = e.target.closest('.code-line');
+                if (line && line.dataset.explanation) {
+                    openModal(line.dataset.explanation, line.dataset.analogy);
+                }
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
