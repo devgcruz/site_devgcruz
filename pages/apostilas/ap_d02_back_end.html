@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POO em Python: A Aplicação Interativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: A thematic, single-page application with a top navigation bar to switch between three core concepts: Atributos, Métodos, and Encapsulamento. Each section features a two-column layout: on the left, a clear explanation of the concept, and on the right, a hands-on, interactive demo. This structure was chosen to transform passive reading into active learning, allowing users to immediately apply theoretical knowledge in a practical playground, which is more effective for understanding abstract programming concepts than a linear document. -->
+    <!-- Visualization & Content Choices: 
+        - Atributos: Report Info -> Object characteristics. Goal -> Demonstrate instance creation. Viz -> HTML form and a dynamic list. Interaction -> User inputs data, clicks "create," and a new object representation appears. Justification -> Visually connects user input to object instantiation. Method -> Vanilla JS DOM manipulation.
+        - Métodos: Report Info -> Object actions. Goal -> Show state changes via methods. Viz -> Buttons and a status display panel. Interaction -> Clicking action buttons updates the object's status in real-time. Justification -> Makes the concept of methods affecting state tangible and immediate. Method -> Vanilla JS event handlers.
+        - Encapsulamento: Report Info -> Data protection. Goal -> Illustrate data safety via interfaces. Viz -> Input forms with validation logic and a status display. Interaction -> Users interact through "safe" methods (depositar, sacar) and a special button demonstrates the "error" of direct access. Justification -> Clearly shows the benefit of encapsulation by enforcing rules and preventing invalid operations. Method -> Vanilla JS with conditional logic.
+        - No charts were used as the content is conceptual and best represented through interactive UI elements rather than data visualization.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .concept-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active {
+            border-bottom-color: #0d9488; /* teal-600 */
+            color: #0f766e; /* teal-700 */
+        }
+        .btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .interactive-panel {
+            border-left: 1px solid #e2e8f0; /* slate-200 */
+        }
+        .output-area {
+            background-color: #f1f5f9; /* slate-100 */
+            border-radius: 0.5rem;
+            min-height: 100px;
+        }
+        .car-card {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-2xl font-bold text-teal-700">POO Interativo</h1>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#atributos" id="nav-atributos" class="nav-link active font-semibold text-slate-600 hover:text-teal-600 pb-1">Atributos</a>
+                    <a href="#metodos" id="nav-metodos" class="nav-link font-semibold text-slate-600 hover:text-teal-600 pb-1">Métodos</a>
+                    <a href="#encapsulamento" id="nav-encapsulamento" class="nav-link font-semibold text-slate-600 hover:text-teal-600 pb-1">Encapsulamento</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- Seção Atributos -->
+        <section id="section-atributos" class="concept-card">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="p-6 md:p-8">
+                    <h2 class="text-3xl font-bold mb-4 text-teal-800">4.3.4. Atributos: As Características</h2>
+                    <div class="space-y-4 text-slate-700 leading-relaxed">
+                        <p>Imagine que você está descrevendo um carro. Quais características ele tem? Cor, marca, modelo, ano. Em POO, essas características são chamadas de <strong>atributos</strong>.</p>
+                        <p>Eles são como variáveis que pertencem a um objeto e guardam suas informações (o estado). Quando criamos uma "forma" para nossos objetos, chamada de <strong>classe</strong>, definimos quais atributos os objetos criados a partir dela terão.</p>
+                        <p class="font-semibold text-teal-700 bg-teal-50 p-3 rounded-md">Nesta demonstração, você vai criar seus próprios objetos `Carro`, definindo seus atributos. Cada carro que você criar será uma <strong>instância</strong> única da classe `Carro`.</p>
+                    </div>
+                </div>
+                <div class="p-6 md:p-8 md:interactive-panel">
+                    <h3 class="text-2xl font-bold mb-4">Demonstração Prática</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="car-marca" class="block text-sm font-medium text-slate-700">Marca</label>
+                            <input type="text" id="car-marca" value="Volkswagen" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500">
+                        </div>
+                        <div>
+                            <label for="car-modelo" class="block text-sm font-medium text-slate-700">Modelo</label>
+                            <input type="text" id="car-modelo" value="Fusca" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500">
+                        </div>
+                        <div>
+                            <label for="car-cor" class="block text-sm font-medium text-slate-700">Cor</label>
+                            <input type="text" id="car-cor" value="Azul" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500">
+                        </div>
+                        <button id="create-car-btn" class="w-full btn bg-teal-600 text-white font-bold py-2 px-4 rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                            Criar Carro
+                        </button>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="font-semibold">Objetos Criados:</h4>
+                        <div id="car-output" class="mt-2 p-4 output-area space-y-3">
+                           <p class="text-slate-500">Nenhum carro criado ainda.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Métodos -->
+        <section id="section-metodos" class="concept-card hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="p-6 md:p-8">
+                    <h2 class="text-3xl font-bold mb-4 text-teal-800">4.3.5. Métodos: As Ações</h2>
+                    <div class="space-y-4 text-slate-700 leading-relaxed">
+                        <p>Se os atributos são as características, os <strong>métodos</strong> são as ações que um objeto pode realizar. O que um carro pode fazer? Ligar, desligar, acelerar, frear.</p>
+                        <p>Métodos são basicamente funções que pertencem a uma classe e geralmente manipulam os atributos do objeto para alterar seu estado.</p>
+                        <p class="font-semibold text-teal-700 bg-teal-50 p-3 rounded-md">Nesta demonstração, você irá interagir com um objeto `Carro` pré-definido. Use os botões para chamar seus métodos e observe como o estado (atributos) do carro muda em tempo real.</p>
+                    </div>
+                </div>
+                <div class="p-6 md:p-8 md:interactive-panel">
+                    <h3 class="text-2xl font-bold mb-4">Demonstração Prática</h3>
+                    <div class="text-center p-4 rounded-lg bg-slate-100">
+                        <p class="text-lg font-semibold">Ferrari F8 Vermelha</p>
+                        <div id="car-status" class="mt-2 text-sm text-slate-600">
+                            <span class="font-bold">Estado:</span> Desligado | <span class="font-bold">Velocidade:</span> 0 km/h
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <button id="toggle-engine-btn" class="btn bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700">Ligar</button>
+                        <button id="accelerate-btn" class="btn bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 disabled:bg-slate-400" disabled>Acelerar (+20)</button>
+                        <button id="brake-btn" class="btn bg-yellow-500 text-white font-bold py-2 px-4 rounded-md hover:bg-yellow-600 disabled:bg-slate-400" disabled>Frear (-15)</button>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="font-semibold">Log de Ações:</h4>
+                        <div id="action-log" class="mt-2 p-4 output-area text-sm text-slate-600 h-32 overflow-y-auto">
+                            <p>Aguardando ações...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Encapsulamento -->
+        <section id="section-encapsulamento" class="concept-card hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="p-6 md:p-8">
+                    <h2 class="text-3xl font-bold mb-4 text-teal-800">4.3.6. Encapsulamento: Protegendo Dados</h2>
+                    <div class="space-y-4 text-slate-700 leading-relaxed">
+                        <p><strong>Encapsulamento</strong> é o princípio de "esconder" os detalhes internos de um objeto e expor apenas o que é necessário através de uma interface segura (métodos públicos).</p>
+                        <p>Em Python, usamos convenções: <strong>`_protegido`</strong> e <strong>`__privado`</strong>. Isso evita que dados importantes, como o saldo de uma conta, sejam modificados acidentalmente de forma incorreta.</p>
+                        <p class="font-semibold text-teal-700 bg-teal-50 p-3 rounded-md">Nesta demonstração, o saldo da `ContaBancaria` é um atributo privado. Você só pode alterá-lo através dos métodos `depositar` e `sacar`, que contêm regras de segurança.</p>
+                    </div>
+                </div>
+                <div class="p-6 md:p-8 md:interactive-panel">
+                    <h3 class="text-2xl font-bold mb-4">Demonstração Prática</h3>
+                    <div class="text-center p-4 rounded-lg bg-slate-100">
+                        <p class="text-lg font-semibold">Conta de João da Silva</p>
+                        <div id="account-balance" class="mt-2 text-xl font-bold text-teal-700">
+                            Saldo: R$ 0.00
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                        <div>
+                            <input type="number" id="deposit-amount" placeholder="Valor para depositar" class="w-full px-3 py-2 border border-slate-300 rounded-md">
+                            <button id="deposit-btn" class="mt-2 w-full btn bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700">Depositar</button>
+                        </div>
+                        <div>
+                            <input type="number" id="withdraw-amount" placeholder="Valor para sacar" class="w-full px-3 py-2 border border-slate-300 rounded-md">
+                            <button id="withdraw-btn" class="mt-2 w-full btn bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700">Sacar</button>
+                        </div>
+                    </div>
+                     <button id="direct-access-btn" class="mt-4 w-full btn bg-slate-500 text-white font-bold py-2 px-4 rounded-md hover:bg-slate-600">Tentar Acessar Saldo Direto</button>
+                    <div class="mt-6">
+                        <h4 class="font-semibold">Log de Transações:</h4>
+                        <div id="transaction-log" class="mt-2 p-4 output-area text-sm text-slate-600 h-32 overflow-y-auto">
+                           <p>Aguardando transações...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = {
+                atributos: document.getElementById('section-atributos'),
+                metodos: document.getElementById('section-metodos'),
+                encapsulamento: document.getElementById('section-encapsulamento')
+            };
+
+            const navLinks = {
+                atributos: document.getElementById('nav-atributos'),
+                metodos: document.getElementById('nav-metodos'),
+                encapsulamento: document.getElementById('nav-encapsulamento')
+            };
+
+            function showSection(sectionName) {
+                Object.values(sections).forEach(section => section.classList.add('hidden'));
+                Object.values(navLinks).forEach(link => link.classList.remove('active'));
+                
+                if (sections[sectionName]) {
+                    sections[sectionName].classList.remove('hidden');
+                }
+                if (navLinks[sectionName]) {
+                    navLinks[sectionName].classList.add('active');
+                }
+            }
+
+            Object.keys(navLinks).forEach(key => {
+                navLinks[key].addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionName = e.target.id.split('-')[1];
+                    showSection(sectionName);
+                    window.location.hash = sectionName;
+                });
+            });
+
+            const initialSection = window.location.hash.substring(1) || 'atributos';
+            showSection(initialSection);
+
+            // Lógica para Atributos
+            const createCarBtn = document.getElementById('create-car-btn');
+            const carOutput = document.getElementById('car-output');
+            let carCount = 0;
+
+            createCarBtn.addEventListener('click', () => {
+                const marca = document.getElementById('car-marca').value || 'N/A';
+                const modelo = document.getElementById('car-modelo').value || 'N/A';
+                const cor = document.getElementById('car-cor').value || 'N/A';
+                
+                if (carCount === 0) {
+                    carOutput.innerHTML = '';
+                }
+                carCount++;
+
+                const carCard = document.createElement('div');
+                carCard.className = 'car-card p-3 rounded-md animate-fade-in';
+                carCard.innerHTML = `
+                    <p class="font-bold">${marca} ${modelo}</p>
+                    <p class="text-sm text-slate-600"><strong>Cor:</strong> ${cor}</p>
+                    <p class="text-xs text-slate-400">Objeto Carro #${carCount} criado.</p>
+                `;
+                carOutput.appendChild(carCard);
+            });
+
+            // Lógica para Métodos
+            const car = {
+                modelo: 'F8',
+                ligado: false,
+                velocidade: 0,
+                ligar() {
+                    if (this.ligado) return 'O F8 já está ligado!';
+                    this.ligado = true;
+                    return 'O F8 foi ligado.';
+                },
+                desligar() {
+                    if (!this.ligado) return 'O F8 já está desligado.';
+                    this.ligado = false;
+                    this.velocidade = 0;
+                    return 'O F8 foi desligado.';
+                },
+                acelerar(valor) {
+                    if (!this.ligado) return 'Não é possível acelerar, o F8 está desligado.';
+                    this.velocidade += valor;
+                    return `Acelerando... Velocidade agora é ${this.velocidade} km/h.`;
+                },
+                frear(valor) {
+                    if(this.velocidade === 0) return 'O carro já está parado.';
+                    this.velocidade -= valor;
+                    if (this.velocidade < 0) this.velocidade = 0;
+                    return `Freando... Velocidade agora é ${this.velocidade} km/h.`;
+                }
+            };
+
+            const toggleEngineBtn = document.getElementById('toggle-engine-btn');
+            const accelerateBtn = document.getElementById('accelerate-btn');
+            const brakeBtn = document.getElementById('brake-btn');
+            const carStatus = document.getElementById('car-status');
+            const actionLog = document.getElementById('action-log');
+            let logCount = 0;
+
+            function updateCarUI() {
+                carStatus.innerHTML = `<span class="font-bold">Estado:</span> ${car.ligado ? 'Ligado' : 'Desligado'} | <span class="font-bold">Velocidade:</span> ${car.velocidade} km/h`;
+                toggleEngineBtn.textContent = car.ligado ? 'Desligar' : 'Ligar';
+                toggleEngineBtn.className = `btn w-full font-bold py-2 px-4 rounded-md ${car.ligado ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`;
+                accelerateBtn.disabled = !car.ligado;
+                brakeBtn.disabled = !car.ligado || car.velocidade === 0;
+            }
+            
+            function logAction(message) {
+                if (logCount === 0) actionLog.innerHTML = '';
+                logCount++;
+                const p = document.createElement('p');
+                p.textContent = message;
+                actionLog.prepend(p);
+            }
+
+            toggleEngineBtn.addEventListener('click', () => {
+                const message = car.ligado ? car.desligar() : car.ligar();
+                logAction(message);
+                updateCarUI();
+            });
+            
+            accelerateBtn.addEventListener('click', () => {
+                logAction(car.acelerar(20));
+                updateCarUI();
+            });
+
+            brakeBtn.addEventListener('click', () => {
+                logAction(car.frear(15));
+                updateCarUI();
+            });
+
+            // Lógica para Encapsulamento
+            const conta = {
+                titular: 'João da Silva',
+                __saldo: 0.0,
+                ver_saldo() {
+                    return this.__saldo;
+                },
+                depositar(valor) {
+                    if (valor > 0) {
+                        this.__saldo += valor;
+                        return `Depósito de R$ ${valor.toFixed(2)} realizado com sucesso.`;
+                    }
+                    return 'Erro: Valor de depósito inválido.';
+                },
+                sacar(valor) {
+                    if (valor <= 0) return 'Erro: Valor de saque inválido.';
+                    if (valor > this.__saldo) return 'Erro: Saldo insuficiente.';
+                    this.__saldo -= valor;
+                    return `Saque de R$ ${valor.toFixed(2)} realizado com sucesso.`;
+                }
+            };
+
+            const balanceDisplay = document.getElementById('account-balance');
+            const depositBtn = document.getElementById('deposit-btn');
+            const withdrawBtn = document.getElementById('withdraw-btn');
+            const directAccessBtn = document.getElementById('direct-access-btn');
+            const transactionLog = document.getElementById('transaction-log');
+            let transLogCount = 0;
+            
+            function updateAccountUI() {
+                balanceDisplay.textContent = `Saldo: R$ ${conta.ver_saldo().toFixed(2)}`;
+            }
+
+            function logTransaction(message) {
+                if(transLogCount === 0) transactionLog.innerHTML = '';
+                transLogCount++;
+                const p = document.createElement('p');
+                if (message.startsWith('Erro:')) {
+                    p.className = 'text-red-600';
+                }
+                p.textContent = message;
+                transactionLog.prepend(p);
+            }
+
+            depositBtn.addEventListener('click', () => {
+                const amount = parseFloat(document.getElementById('deposit-amount').value);
+                if (isNaN(amount)) {
+                    logTransaction('Erro: Por favor, insira um número válido.');
+                    return;
+                }
+                const message = conta.depositar(amount);
+                logTransaction(message);
+                updateAccountUI();
+                document.getElementById('deposit-amount').value = '';
+            });
+
+            withdrawBtn.addEventListener('click', () => {
+                const amount = parseFloat(document.getElementById('withdraw-amount').value);
+                if (isNaN(amount)) {
+                    logTransaction('Erro: Por favor, insira um número válido.');
+                    return;
+                }
+                const message = conta.sacar(amount);
+                logTransaction(message);
+                updateAccountUI();
+                document.getElementById('withdraw-amount').value = '';
+            });
+
+            directAccessBtn.addEventListener('click', () => {
+                logTransaction('Tentativa de acesso direto a `__saldo`. Em Python, isso causaria um AttributeError porque o nome foi "desfigurado" para `_ContaBancaria__saldo`. Acesso bloqueado!');
+            });
+        });
+    </script>
+</body>
+</html>
