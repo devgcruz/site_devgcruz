@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Interativo: Cadastro com PHP e MySQL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-block {
+            position: relative;
+            background-color: #2d2d2d;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+        .code-block pre[class*="language-"] {
+            font-family: 'Fira Code', monospace;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none; /* Standard syntax */
+            margin: 0;
+            line-height: 1.5;
+        }
+        .token.comment {
+            opacity: 0.7;
+        }
+        .code-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            cursor: default;
+        }
+        .copy-tooltip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ef4444;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .code-block:hover .copy-tooltip.active {
+            opacity: 1;
+        }
+        .prose h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .prose p, .prose li {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: #4b5563;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .prose code {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="min-h-screen flex flex-col">
+        <!-- Cabeçalho -->
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-6 py-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Tutorial: Crie seu Sistema de Cadastro</h1>
+                <p class="text-gray-600 mt-1">Um guia passo a passo para construir um formulário de cadastro com PHP e MySQL.</p>
+            </div>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-grow container mx-auto px-6 py-8">
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+                <div id="tutorial-content" class="prose max-w-none">
+                    <!-- O conteúdo das etapas será injetado aqui pelo JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Navegação -->
+        <footer class="bg-white sticky bottom-0 border-t border-gray-200">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <button id="prev-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg inline-flex items-center transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Anterior
+                </button>
+                <div class="text-sm font-medium text-gray-600">
+                    Etapa <span id="current-step">1</span> de <span id="total-steps">8</span>
+                </div>
+                <button id="next-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition duration-300">
+                    Próximo
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+
+    <script>
+        const steps = [
+            // Etapa 0: Introdução
+            {
+                title: "Boas-vindas ao Tutorial!",
+                content: `
+                    <p>Olá, futuro(a) desenvolvedor(a)! Bem-vindo(a) ao guia prático para criar seu primeiro sistema de cadastro.</p>
+                    <p>Nesta versão, <strong>cada linha de código será comentada</strong> para explicar exatamente o que ela faz, facilitando ainda mais o seu aprendizado.</p>
+                    <p class="font-semibold text-indigo-600">Lembre-se: o objetivo é que você <strong>digite cada linha de código</strong>. A prática leva à perfeição!</p>
+                    <p>Pronto para começar? Clique em "Próximo".</p>
+                `
+            },
+            // Etapa 1: Estrutura de Arquivos
+            {
+                title: "Etapa 1: Organizando a Área de Trabalho",
+                content: `
+                    <p>Um bom projeto começa com uma boa organização. Crie uma pasta principal para o projeto chamada <code>projeto_cadastro</code>.</p>
+                    <p>Dentro dela, crie os quatro arquivos que formarão nosso sistema. Cada um tem uma responsabilidade clara:</p>
+                    <ul>
+                        <li><code>index.php</code>: A "vitrine" do nosso site. Conterá o formulário HTML que o usuário preenche.</li>
+                        <li><code>style.css</code>: O "decorador". Deixará nosso formulário com uma aparência limpa e profissional.</li>
+                        <li><code>conexao.php</code>: O "mensageiro". Será responsável por estabelecer a comunicação segura com o banco de dados.</li>
+                        <li><code>cadastrar.php</code>: O "cérebro". Receberá os dados do formulário, irá validá-los e salvá-los no banco.</li>
+                    </ul>
+                    <p>Após criar os arquivos, sua estrutura de pastas deve se parecer com esta:</p>
+                    <div class="code-block">
+                        <pre class="language-text"><code>projeto_cadastro/
+├── index.php
+├── style.css
+├── conexao.php
+└── cadastrar.php
+</code></pre>
+                        <div class="code-overlay"></div>
+                        <div class="copy-tooltip">Digite o código para aprender!</div>
+                    </div>
+                `
+            },
+            // Etapa 2: Banco de Dados
+            {
+                title: "Etapa 2: Preparando o Banco de Dados",
+                content: `
+                    <p>As informações dos usuários precisam de um lugar seguro para serem armazenadas. Esse lugar é o nosso banco de dados MySQL.</p>
+                    <p>Primeiro, acesse seu painel de gerenciamento de banco de dados (como o <strong>phpMyAdmin</strong>) e crie um novo banco de dados chamado <code>cad_usu</code>.</p>
+                    <p>Com o banco de dados criado, selecione-o e vá para a aba <strong>SQL</strong>. Agora, com muito cuidado, <strong>digite</strong> o comando abaixo para criar nossa tabela <code>usuarios</code>.</p>
+                    <div class="code-block">
+                        <pre class="language-sql"><code>-- Comando para criar uma nova tabela chamada 'usuarios' se ela não existir.
+CREATE TABLE usuarios (
+    -- 'id': um número de identificação único para cada usuário.
+    -- INT: tipo de dado (número inteiro).
+    -- AUTO_INCREMENT: o valor aumenta sozinho a cada novo registro.
+    -- PRIMARY KEY: define esta coluna como a chave principal da tabela.
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    -- 'nome': coluna para armazenar o nome do usuário.
+    -- VARCHAR(255): tipo de dado (texto com até 255 caracteres).
+    -- NOT NULL: este campo não pode ser deixado em branco.
+    nome VARCHAR(255) NOT NULL,
+
+    -- 'email': coluna para o e-mail.
+    -- UNIQUE: garante que não haverá dois e-mails iguais na tabela.
+    email VARCHAR(255) NOT NULL UNIQUE,
+
+    -- 'senha': coluna para a senha.
+    senha VARCHAR(255) NOT NULL,
+
+    -- 'data_cadastro': armazena a data e hora do cadastro.
+    -- TIMESTAMP: tipo de dado para data e hora.
+    -- DEFAULT CURRENT_TIMESTAMP: insere a data e hora atuais automaticamente.
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                        <div class="code-overlay"></div>
+                        <div class="copy-tooltip">Digite o código para aprender!</div>
+                    </div>
+                `
+            },
+            // Etapa 3: A Conexão
+            {
+                title: "Etapa 3: O Fio Telefônico (conexao.php)",
+                content: `
+                    <p>Agora vamos criar o script que conecta nosso sistema PHP ao banco de dados MySQL. Este arquivo é crucial e será reutilizado sempre que precisarmos falar com o banco.</p>
+                    <p>Abra o arquivo <code>conexao.php</code> e <strong>digite</strong> o código abaixo.</p>
+                    <div class="code-block">
+                        <pre class="language-php"><code>&lt;?php
+// --- CREDENCIAIS DE ACESSO AO BANCO DE DADOS ---
+
+// Define o endereço do servidor do banco de dados. "localhost" é o padrão para um servidor na própria máquina.
+$servidor = "localhost";
+// Define o nome de usuário para acessar o banco de dados. "root" é o padrão no XAMPP.
+$usuario_db = "root";
+// Define a senha do usuário. O padrão no XAMPP é uma senha vazia.
+$senha_db = "";
+// Define o nome do banco de dados ao qual queremos nos conectar.
+$banco = "cad_usu";
+
+// --- CRIAÇÃO E VERIFICAÇÃO DA CONEXÃO ---
+
+// Tenta criar uma nova conexão com o banco de dados usando as credenciais fornecidas.
+$conexao = new mysqli($servidor, $usuario_db, $senha_db, $banco);
+
+// Verifica se ocorreu algum erro durante a tentativa de conexão.
+if ($conexao->connect_error) {
+    // Se houver um erro, interrompe a execução do script e exibe uma mensagem de falha.
+    die("Falha na conexão: " . $conexao->connect_error);
+}
+
+// --- CONFIGURAÇÃO ADICIONAL ---
+
+// Define o conjunto de caracteres da conexão como UTF-8 para suportar acentos e caracteres especiais.
+$conexao->set_charset("utf8");
+
+?&gt;</code></pre>
+                        <div class="code-overlay"></div>
+                        <div class="copy-tooltip">Digite o código para aprender!</div>
+                    </div>
+                `
+            },
+            // Etapa 4: Formulário HTML
+            {
+                title: "Etapa 4: A Ficha de Cadastro (index.php)",
+                content: `
+                    <p>É hora de criar a interface que o usuário verá. O arquivo <code>index.php</code> conterá um formulário HTML simples para coletar os dados.</p>
+                    <p>Abra o <code>index.php</code> e <strong>digite</strong> a estrutura HTML abaixo.</p>
+                     <div class="code-block">
+                        <pre class="language-html"><code>&lt;!DOCTYPE html&gt; &lt;!-- Define o documento como HTML5 --&gt;
+&lt;html lang="pt-br"&gt; &lt;!-- Início do documento HTML, com o idioma definido para português do Brasil --&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt; &lt;!-- Define o conjunto de caracteres como UTF-8 para suportar acentos --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt; &lt;!-- Garante que a página seja responsiva em dispositivos móveis --&gt;
+    &lt;title&gt;Cadastro de Usuário&lt;/title&gt; &lt;!-- Título que aparece na aba do navegador --&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt; &lt;!-- Conecta este arquivo HTML ao arquivo de estilos CSS --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Um contêiner para centralizar e estilizar o formulário --&gt;
+    &lt;div class="container"&gt;
+        &lt;!-- Início do formulário. 'action' define para qual arquivo os dados serão enviados. 'method' define como serão enviados (POST é mais seguro) --&gt;
+        &lt;form action="cadastrar.php" method="POST"&gt;
+            &lt;h2&gt;Cadastre-se&lt;/h2&gt; &lt;!-- Título do formulário --&gt;
+
+            &lt;!-- Grupo para o campo 'Nome' --&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="nome"&gt;Nome Completo&lt;/label&gt; &lt;!-- Rótulo do campo, visível para o usuário --&gt;
+                &lt;!-- Campo de entrada de texto. 'name="nome"' é o identificador que o PHP usará. 'required' torna o preenchimento obrigatório --&gt;
+                &lt;input type="text" id="nome" name="nome" required&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Grupo para o campo 'E-mail' --&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="email"&gt;E-mail&lt;/label&gt;
+                &lt;!-- O 'type="email"' ajuda o navegador a validar se o formato do e-mail está correto --&gt;
+                &lt;input type="email" id="email" name="email" required&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Grupo para o campo 'Senha' --&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="senha"&gt;Senha&lt;/label&gt;
+                &lt;!-- O 'type="password"' mascara os caracteres digitados --&gt;
+                &lt;input type="password" id="senha" name="senha" required&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Botão para enviar os dados do formulário --&gt;
+            &lt;button type="submit"&gt;Cadastrar&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        <div class="code-overlay"></div>
+                        <div class="copy-tooltip">Digite o código para aprender!</div>
+                    </div>
+                `
+            },
+            // Etapa 5: Estilo CSS
+            {
+                title: "Etapa 5: Deixando Tudo Bonito (style.css)",
+                content: `
+                    <p>Um formulário funcional é bom, mas um formulário com boa aparência é ainda melhor! Vamos adicionar algumas regras de CSS para estilizar nossa página de cadastro.</p>
+                    <p>Abra o arquivo <code>style.css</code> e <strong>digite</strong> o código a seguir.</p>
+                    <div class="code-block">
+                        <pre class="language-css"><code>/* Estilo aplicado a toda a página */
+body {
+    font-family: Arial, sans-serif; /* Define a família da fonte */
+    background-color: #f0f2f5; /* Cor de fundo da página */
+    display: flex; /* Habilita o layout flexbox */
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    height: 100vh; /* Faz o corpo ocupar 100% da altura da tela */
+    margin: 0; /* Remove a margem padrão do navegador */
+}
+
+/* Estilo para a caixa que envolve o formulário */
+.container {
+    background-color: #fff; /* Cor de fundo branca */
+    padding: 20px 40px; /* Espaçamento interno */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 350px; /* Largura fixa */
+}
+
+/* Estilo para o título "Cadastre-se" */
+h2 {
+    text-align: center; /* Centraliza o texto */
+    color: #333; /* Cor do texto */
+    margin-bottom: 20px; /* Margem na parte inferior */
+}
+
+/* Estilo para as caixas que agrupam label e input */
+.form-group {
+    margin-bottom: 15px; /* Margem na parte inferior */
+}
+
+/* Estilo para os rótulos (Nome Completo, E-mail, Senha) */
+.form-group label {
+    display: block; /* Faz o rótulo ocupar uma linha inteira */
+    margin-bottom: 5px; /* Margem inferior pequena */
+    color: #555; /* Cor do texto */
+}
+
+/* Estilo para os campos de entrada de texto */
+.form-group input {
+    width: 100%; /* Ocupa 100% da largura do contêiner */
+    padding: 10px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda cinza */
+    border-radius: 4px; /* Bordas arredondadas */
+    box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+}
+
+/* Estilo para o botão de cadastro */
+button {
+    width: 100%; /* Ocupa 100% da largura */
+    padding: 12px; /* Espaçamento interno */
+    background-color: #007bff; /* Cor de fundo azul */
+    border: none; /* Remove a borda padrão */
+    border-radius: 4px; /* Bordas arredondadas */
+    color: white; /* Cor do texto */
+    font-size: 16px; /* Tamanho da fonte */
+    cursor: pointer; /* Muda o cursor para uma "mãozinha" */
+    transition: background-color 0.3s ease; /* Efeito suave na mudança de cor */
+}
+
+/* Estilo para o botão quando o mouse passa por cima */
+button:hover {
+    background-color: #0056b3; /* Cor de fundo azul mais escura */
+}</code></pre>
+                        <div class="code-overlay"></div>
+                        <div class="copy-tooltip">Digite o código para aprender!</div>
+                    </div>
+                `
+            },
+             // Etapa 6: Lógica do Cadastro
+            {
+                title: "Etapa 6: O Cérebro da Operação (cadastrar.php)",
+                content: `
+                    <p>Chegamos à parte mais importante: a lógica do cadastro. Este script PHP receberá os dados, fará a validação, protegerá a senha e, finalmente, salvará tudo no banco de dados.</p>
+                    <p>Abra o arquivo <code>cadastrar.php</code> e <strong>digite</strong> o código a seguir.</p>
+                    <div class="code-block">
+                        <pre class="language-php"><code>&lt;?php
+
+// 1. Inclui o arquivo de conexão para poder interagir com o banco de dados.
+include 'conexao.php';
+
+// 2. Verifica se a requisição foi feita usando o método POST, que é o método que nosso formulário usa.
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // 3. Pega os dados enviados pelo formulário.
+    // A função 'real_escape_string' limpa os dados para evitar um tipo de ataque chamado SQL Injection.
+    $nome = $conexao->real_escape_string($_POST['nome']);
+    $email = $conexao->real_escape_string($_POST['email']);
+    $senha = $conexao->real_escape_string($_POST['senha']);
+
+    // 4. Validação básica: verifica se algum dos campos obrigatórios está vazio.
+    if (empty($nome) || empty($email) || empty($senha)) {
+        // Se algum campo estiver vazio, exibe uma mensagem e para a execução do script.
+        echo "Por favor, preencha todos os campos.";
+        exit;
+    }
+
+    // 5. Criptografa a senha. NUNCA se deve salvar senhas em texto puro no banco de dados.
+    // 'password_hash' cria um hash seguro e moderno da senha.
+    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+
+    // 6. Prepara o comando SQL para inserir os dados de forma segura.
+    // Os pontos de interrogação (?) são marcadores de posição (placeholders).
+    $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
+    
+    // 'prepare' cria uma instrução preparada, que é mais segura que uma query SQL direta.
+    $stmt = $conexao->prepare($sql);
+    
+    // 7. Vincula (bind) as variáveis PHP aos marcadores de posição da instrução SQL.
+    // "sss" significa que estamos passando três variáveis do tipo string (texto).
+    $stmt->bind_param("sss", $nome, $email, $senha_hash);
+
+    // 8. Executa a instrução preparada e verifica se foi bem-sucedida.
+    if ($stmt->execute()) {
+        // Se a execução for bem-sucedida, exibe uma mensagem de sucesso.
+        echo "&lt;h1&gt;Cadastro realizado com sucesso!&lt;/h1&gt;";
+        echo "&lt;p&gt;&lt;a href='index.php'&gt;Voltar para o formulário&lt;/a&gt;&lt;/p&gt;";
+    } else {
+        // Se ocorrer um erro...
+        // Verifica se o erro foi de 'chave duplicada' (código 1062), que geralmente significa que o e-mail já existe.
+        if ($conexao->errno == 1062) {
+            echo "Erro: Este e-mail já está cadastrado.";
+        } else {
+            // Para outros tipos de erro, exibe uma mensagem genérica com o erro técnico.
+            echo "Erro ao cadastrar: " . $stmt->error;
+        }
+    }
+
+    // 9. Fecha o statement e a conexão para liberar os recursos do servidor.
+    $stmt->close();
+    $conexao->close();
+
+} else {
+    // Se alguém tentar acessar este arquivo diretamente (sem ser via POST), redireciona para a página do formulário.
+    header("Location: index.php");
+    exit(); // Garante que o script pare de ser executado após o redirecionamento.
+}
+?&gt;</code></pre>
+                        <div class="code-overlay"></div>
+                        <div class="copy-tooltip">Digite o código para aprender!</div>
+                    </div>
+                `
+            },
+            // Etapa 7: Conclusão
+            {
+                title: "Parabéns, você conseguiu!",
+                content: `
+                    <p>Se você seguiu todos os passos e digitou cada linha de código, agora você tem um sistema de cadastro de usuários completo e funcional!</p>
+                    <p>Vamos recapitular o que você construiu:</p>
+                    <ul>
+                        <li>Um <strong>banco de dados MySQL</strong> para armazenar os dados de forma persistente.</li>
+                        <li>Um <strong>formulário HTML</strong> para a entrada de dados do usuário, com estilo via <strong>CSS</strong>.</li>
+                        <li>Um script de <strong>conexão PHP</strong> seguro e reutilizável.</li>
+                        <li>Uma <strong>lógica de backend em PHP</strong> que processa os dados, criptografa senhas (muito importante!) e os insere no banco de dados de forma segura usando Prepared Statements.</li>
+                    </ul>
+                    <p class="font-semibold text-indigo-600">Este é um passo fundamental na jornada de um desenvolvedor web. Continue praticando, modificando este projeto e adicionando novas funcionalidades, como um sistema de login. O céu é o limite!</p>
+                `
+            }
+        ];
+
+        let currentStep = 0;
+        const tutorialContent = document.getElementById('tutorial-content');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentStepEl = document.getElementById('current-step');
+        const totalStepsEl = document.getElementById('total-steps');
+
+        function showStep(stepIndex) {
+            const step = steps[stepIndex];
+            tutorialContent.innerHTML = `<h2>${step.title}</h2>${step.content}`;
+            currentStepEl.textContent = stepIndex + 1;
+            Prism.highlightAllUnder(tutorialContent);
+            setupCodeBlockListeners();
+            updateNavButtons();
+            window.scrollTo(0, 0);
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentStep === 0;
+            nextBtn.disabled = currentStep === steps.length - 1;
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        
+        function setupCodeBlockListeners() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                const overlay = block.querySelector('.code-overlay');
+                const tooltip = block.querySelector('.copy-tooltip');
+                
+                overlay.addEventListener('mousedown', (e) => {
+                    e.preventDefault(); // Impede a seleção de texto
+                    tooltip.classList.add('active');
+                    setTimeout(() => tooltip.classList.remove('active'), 1500);
+                });
+            });
+        }
+
+        // Event Listeners
+        prevBtn.addEventListener('click', prevStep);
+        nextBtn.addEventListener('click', nextStep);
+
+        // Inicialização
+        totalStepsEl.textContent = steps.length;
+        showStep(currentStep);
+
+    </script>
+</body>
+</html>
